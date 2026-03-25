@@ -12,14 +12,13 @@ A focused markdown editor that works with any file source — open from anywhere
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] User can open a markdown file using the in-app file picker — Validated in Phase 01: Foundation
+- [x] User can open a markdown file via "Open With" from another app (Google Drive, Files, etc.) — Validated in Phase 01: Foundation
+- [x] User can edit the opened file as raw text — Validated in Phase 01: Foundation
+- [x] User can save edits back to the original file location — Validated in Phase 01: Foundation
 
 ### Active
 
-- [ ] User can open a markdown file using the in-app file picker
-- [ ] User can open a markdown file via "Open With" from another app (Google Drive, Files, etc.)
-- [ ] User can edit the opened file as raw text
-- [ ] User can save edits back to the original file location
 - [ ] Editor shows a visual indicator when there are unsaved changes
 - [ ] Editor applies markdown syntax coloring
 - [ ] App supports light and dark mode
@@ -56,7 +55,7 @@ A focused markdown editor that works with any file source — open from anywhere
 |----------|-----------|---------|
 | Document sharing instead of Drive API | Simpler, supports all file sources, no OAuth needed | ✓ Approved |
 | Raw editor for v1 (no preview) | Simpler to build; validates core value first | ✓ Approved |
-| UIDocument for file coordination | iOS standard for read/write back to original location | — Pending |
+| UIDocument for file coordination | iOS standard for read/write back to original location | ✓ Implemented |
 
 ---
-*Last updated: 2026-03-25 after architectural pivot to document-sharing model*
+*Last updated: 2026-03-25 — Phase 01 complete: open-edit-save loop fully implemented*
