@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-01-PLAN.md
-last_updated: "2026-03-25T20:43:15.588Z"
+stopped_at: Completed 01-02-PLAN.md
+last_updated: "2026-03-25T21:10:00.626Z"
 progress:
   total_phases: 3
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State: iOS Markdown Editor
@@ -24,14 +24,14 @@ progress:
 ## Current Position
 
 Phase: 01 (foundation) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
-[███░░░░░░░] 33%
+[███████░░░] 67%
 
 ## Focus
 
-**This session:** Completed Plan 01-01 — Xcode project scaffold + MarkdownDocument + AppState
-**Next session:** Execute Plan 01-02 — HomeView (file picker UI)
+**This session:** Completed Plan 01-02 — HomeView (empty state + file picker) + onOpenURL wiring
+**Next session:** Execute Plan 01-03 — EditorView (raw text editor + auto-save)
 
 ---
 
@@ -113,6 +113,9 @@ From research/SUMMARY.md:
 | MarkdownDocument @unchecked Sendable | UIDocument is main-thread-only; @unchecked satisfies Swift 6 without changing behavior | 01-01 | ✓ Implemented |
 | Task { @MainActor } in UIDocument callbacks | Swift 6 idiom for dispatching UIDocument completion back to main actor | 01-01 | ✓ Implemented |
 | UTF-8 with isoLatin1 fallback in load() | Prevents silent corruption on non-UTF-8 encoded .md files | 01-01 | ✓ Implemented |
+| .fileImporter over UIDocumentPickerViewController | Simpler, handles security-scoped URL access automatically, SwiftUI-native | 01-02 | ✓ Implemented |
+| allowedContentTypes includes .plainText fallback | Ensures .md files appear on all iOS versions regardless of UTI registration | 01-02 | ✓ Implemented |
+| EditorView stub as separate file | Cleaner structure; Plan 03 replaces body without moving code | 01-02 | ✓ Implemented |
 
 ---
 
@@ -158,6 +161,27 @@ From research/SUMMARY.md:
 **Blockers:** None
 
 **Stopped at:** Completed 01-01-PLAN.md
+
+### Plan 01-02 Execution (2026-03-25)
+
+**Actions:**
+
+- Created HomeView.swift with empty state UI (icon, title, subtitle, "Open File" button)
+- Added .fileImporter modifier filtered to net.daringfireball.markdown and .plainText UTIs
+- Created EditorView.swift stub (placeholder for Plan 03); added both files to Xcode project
+- Updated MarkdownEditorApp.swift to use HomeView() as root (replaces ContentView placeholder)
+- Auto-fixed: registered HomeView.swift and EditorView.swift in project.pbxproj (blocking issue — new files not compiled without project file entry)
+- Build verified: BUILD SUCCEEDED with zero errors
+
+**Decisions:**
+
+- `.fileImporter` over UIDocumentPickerViewController wrapper (simpler, security-scoped access automatic)
+- `.plainText` fallback in allowedContentTypes (ensures .md visibility on all iOS versions)
+- EditorView stub as separate file (clean replacement target for Plan 03)
+
+**Blockers:** None
+
+**Stopped at:** Completed 01-02-PLAN.md
 
 ---
 
