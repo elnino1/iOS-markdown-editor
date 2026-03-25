@@ -5,12 +5,25 @@ import Combine
 class AppState: ObservableObject {
     @Published var document: MarkdownDocument? = nil
     @Published var isEditorPresented: Bool = false
+    @Published var pendingOpenURL: URL? = nil  // signals EditorView to show unsaved-changes alert
 
-    // Opens a security-scoped URL using UIDocument coordination
     func open(url: URL) {
-        // Close any existing document before opening a new one.
-        // The unsaved-changes alert logic lives in EditorView (Plan 03)
-        // and calls this only after the user resolves any pending changes.
+        if let existingDoc = document, existingDoc.hasUnsavedChanges {
+            // There's an open document with unsaved changes.
+            // Signal EditorView to show the unsaved-changes alert.
+            pendingOpenURL = url
+            return
+        }
+        _openDirectly(url: url)
+    }
+
+    func openAfterResolvingConflict(url: URL) {
+        // Called by EditorView after user picks Save or Discard
+        pendingOpenURL = nil
+        _openDirectly(url: url)
+    }
+
+    private func _openDirectly(url: URL) {
         let doc = MarkdownDocument(fileURL: url)
         doc.open { [weak self] success in
             // UIDocument callbacks may arrive on any thread; dispatch to main actor.
@@ -26,6 +39,7 @@ class AppState: ObservableObject {
 
     func closeCurrentDocument(completion: (() -> Void)? = nil) {
         guard let doc = document else {
+            isEditorPresented = false
             completion?()
             return
         }
