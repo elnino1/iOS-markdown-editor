@@ -1,26 +1,20 @@
 # Requirements: iOS Markdown Editor
 
 **Defined:** 2026-03-25
-**Core Value:** Users can browse, edit, and save markdown files anywhere in their Google Drive — including dot folders that other apps hide.
+**Updated:** 2026-03-25 (architectural pivot — removed Drive API/OAuth, adopted document sharing)
+**Core Value:** A focused markdown editor that works with any file source — open from anywhere, edit, save back.
 
 ## v1 Requirements
 
-### Authentication
+### File Access
 
-- [ ] **AUTH-01**: User can sign in with their Google account (OAuth 2.0)
-- [ ] **AUTH-02**: User stays signed in across app restarts
-- [ ] **AUTH-03**: User can sign out
-
-### File Browser
-
-- [ ] **BROW-01**: User can browse Google Drive folder hierarchy including dot folders (e.g. `.claude`, `.planning`)
-- [ ] **BROW-02**: User can navigate into subfolders
-- [ ] **BROW-03**: Only `.md` files are shown in folder listings (folders always visible)
+- [ ] **FILE-01**: User can open a markdown file using the in-app file picker (UIDocumentPickerViewController)
+- [ ] **FILE-02**: User can open a markdown file via "Open With" from another app (Google Drive, Files app, etc.)
 
 ### Editor
 
-- [ ] **EDIT-01**: User can open a markdown file and edit it as raw text
-- [ ] **EDIT-02**: User can save edits back to the original file in Google Drive
+- [ ] **EDIT-01**: User can edit the opened file as raw text
+- [ ] **EDIT-02**: User can save edits back to the original file location
 - [ ] **EDIT-03**: App shows a visual indicator when there are unsaved changes
 - [ ] **EDIT-04**: Editor applies markdown syntax coloring
 
@@ -39,12 +33,12 @@
 
 | Feature | Reason |
 |---------|--------|
+| Google Drive API / OAuth | Not needed — user opens files via "Open With" from Google Drive app |
+| Built-in Drive folder browser | User browses in Google Drive app (shows all folders incl. dot folders) |
 | Note-taking / organization features | This is an editor, not a notes app |
-| Local file storage | Drive-only; no local persistence of markdown content |
 | WYSIWYG editing | Deferred to v2+ |
-| iCloud / Dropbox / other storage | Google Drive only for v1 |
-| Real-time collaboration | Out of scope; single-user editing |
-| Offline editing | Network required; conflict resolution too complex for v1 |
+| Real-time collaboration | Out of scope |
+| Offline editing | Handled by source app (Google Drive app has offline mode) |
 | App Store publishing | Personal use first |
 
 ## Traceability
@@ -53,24 +47,19 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
-| AUTH-03 | Phase 1 | Pending |
-| BROW-01 | Phase 2 | Pending |
-| BROW-02 | Phase 2 | Pending |
-| BROW-03 | Phase 2 | Pending |
-| EDIT-01 | Phase 3 | Pending |
-| EDIT-02 | Phase 4 | Pending |
-| EDIT-03 | Phase 3 | Pending |
-| EDIT-04 | Phase 3 | Pending |
-| APPR-01 | Phase 3 | Pending |
+| FILE-01 | Phase 1 | Pending |
+| FILE-02 | Phase 1 | Pending |
+| EDIT-01 | Phase 1 | Pending |
+| EDIT-02 | Phase 1 | Pending |
+| EDIT-03 | Phase 2 | Pending |
+| EDIT-04 | Phase 2 | Pending |
+| APPR-01 | Phase 2 | Pending |
 
 **Coverage:**
-- v1 requirements: 11 total
-- Mapped to phases: 11
+- v1 requirements: 7 total
+- Mapped to phases: 7
 - Unmapped: 0 ✓
 
 ---
-
 *Requirements defined: 2026-03-25*
-*Last updated: 2026-03-25 after roadmap creation*
+*Last updated: 2026-03-25 after architectural pivot*
