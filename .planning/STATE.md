@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-02-PLAN.md
-last_updated: "2026-03-25T21:10:00.626Z"
+stopped_at: Completed 01-03-PLAN.md
+last_updated: "2026-03-25T21:16:19.284Z"
 progress:
   total_phases: 3
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 3
-  completed_plans: 2
+  completed_plans: 3
 ---
 
 # Project State: iOS Markdown Editor
@@ -23,15 +23,15 @@ progress:
 
 ## Current Position
 
-Phase: 01 (foundation) — EXECUTING
+Phase: 01 (foundation) — COMPLETE
 Plan: 3 of 3
 
-[███████░░░] 67%
+[██████████] 100%
 
 ## Focus
 
-**This session:** Completed Plan 01-02 — HomeView (empty state + file picker) + onOpenURL wiring
-**Next session:** Execute Plan 01-03 — EditorView (raw text editor + auto-save)
+**This session:** Completed Plan 01-03 — EditorView (raw text editor + auto-save + unsaved-changes guard)
+**Next session:** Begin Phase 2 — Browse (folder hierarchy with dot folder support)
 
 ---
 
@@ -116,6 +116,9 @@ From research/SUMMARY.md:
 | .fileImporter over UIDocumentPickerViewController | Simpler, handles security-scoped URL access automatically, SwiftUI-native | 01-02 | ✓ Implemented |
 | allowedContentTypes includes .plainText fallback | Ensures .md files appear on all iOS versions regardless of UTI registration | 01-02 | ✓ Implemented |
 | EditorView stub as separate file | Cleaner structure; Plan 03 replaces body without moving code | 01-02 | ✓ Implemented |
+| iOS 16 compatible onChange | Used single-argument .onChange(of:) { value in } form (iOS 14+); plan's two-argument form requires iOS 17+ | 01-03 | ✓ Implemented |
+| pendingOpenURL in AppState | Enables open(url:) from any source (onOpenURL, file picker) to trigger unsaved-changes alert without EditorView intercepting every call | 01-03 | ✓ Implemented |
+| 1.5s auto-save delay | Within CONTEXT.md 1-2s discretion range; balances responsiveness and disk write frequency | 01-03 | ✓ Implemented |
 
 ---
 
@@ -160,7 +163,7 @@ From research/SUMMARY.md:
 
 **Blockers:** None
 
-**Stopped at:** Completed 01-01-PLAN.md
+**Stopped at:** Completed 01-03-PLAN.md
 
 ### Plan 01-02 Execution (2026-03-25)
 
@@ -182,6 +185,27 @@ From research/SUMMARY.md:
 **Blockers:** None
 
 **Stopped at:** Completed 01-02-PLAN.md
+
+### Plan 01-03 Execution (2026-03-25)
+
+**Actions:**
+
+- Replaced EditorView stub with full TextEditor implementation
+- Added Combine-based 1.5s debounce auto-save via updateChangeCount(.done)
+- Added unsaved-changes alert (Save / Discard / Cancel) coordinated via pendingOpenURL
+- Updated AppState with pendingOpenURL @Published property and openAfterResolvingConflict(url:)
+- Auto-fixed: plan's two-argument .onChange closure (iOS 17+ only) -> single-argument form (iOS 16+)
+- Build verified: BUILD SUCCEEDED with zero errors
+
+**Decisions:**
+
+- Single-argument `.onChange(of:)` for iOS 16 compatibility
+- `pendingOpenURL` in AppState for cross-source open coordination
+- 1.5s auto-save delay (within CONTEXT.md 1-2s discretion range)
+
+**Blockers:** None
+
+**Stopped at:** Completed 01-03-PLAN.md
 
 ---
 
