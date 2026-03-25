@@ -55,7 +55,12 @@ Plans:
 2. App shows a clear visual indicator when file has unsaved changes (e.g. dot in title bar, modified badge)
 3. App looks correct in both light and dark mode throughout all screens
 
-**Plan:** TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 02-00-PLAN.md — XCTest target scaffold + failing test stubs for EDIT-03, EDIT-04
+- [ ] 02-01-PLAN.md — HighlightingService (regex + AttributedString) + ThemeColors (semantic light/dark) + MarkdownTextEditor (UIViewRepresentable)
+- [ ] 02-02-PLAN.md — Wire MarkdownTextEditor into EditorView + unsaved indicator in title + visual dark mode checkpoint (EDIT-03, APPR-01)
 
 ---
 
@@ -82,7 +87,7 @@ Plans:
 | Phase | Goal | Requirements | Status | Completed |
 |-------|------|--------------|--------|-----------|
 | 1 - Core | 3/3 | Complete   | 2026-03-25 | - |
-| 2 - Editor Experience | Coloring + indicator + appearance | 3 (EDIT-03, EDIT-04, APPR-01) | Not started | - |
+| 2 - Editor Experience | Coloring + indicator + appearance | 3 (EDIT-03, EDIT-04, APPR-01) | In planning | - |
 | 3 - Polish | Edge cases | 0 (optional) | Not started | - |
 
 ---
@@ -112,3 +117,4 @@ Phase 3: Polish (hardening)
 *Roadmap created: 2026-03-25*
 *Updated: 2026-03-25 — architectural pivot to UIDocument / document sharing model*
 *Updated: 2026-03-25 — Phase 1 planned (3 plans)*
+*Updated: 2026-03-25 — Phase 2 planned (3 plans: wave 0 test scaffolding, wave 1 highlighting engine, wave 2 wiring + visual checkpoint)*
