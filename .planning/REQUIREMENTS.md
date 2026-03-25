@@ -8,13 +8,13 @@
 
 ### File Access
 
-- [ ] **FILE-01**: User can open a markdown file using the in-app file picker (UIDocumentPickerViewController)
-- [ ] **FILE-02**: User can open a markdown file via "Open With" from another app (Google Drive, Files app, etc.)
+- [x] **FILE-01**: User can open a markdown file using the in-app file picker (UIDocumentPickerViewController)
+- [x] **FILE-02**: User can open a markdown file via "Open With" from another app (Google Drive, Files app, etc.)
 
 ### Editor
 
-- [ ] **EDIT-01**: User can edit the opened file as raw text
-- [ ] **EDIT-02**: User can save edits back to the original file location
+- [x] **EDIT-01**: User can edit the opened file as raw text
+- [x] **EDIT-02**: User can save edits back to the original file location
 - [ ] **EDIT-03**: App shows a visual indicator when there are unsaved changes
 - [ ] **EDIT-04**: Editor applies markdown syntax coloring
 
@@ -47,10 +47,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FILE-01 | Phase 1 | Pending |
-| FILE-02 | Phase 1 | Pending |
-| EDIT-01 | Phase 1 | Pending |
-| EDIT-02 | Phase 1 | Pending |
+| FILE-01 | Phase 1 | Complete |
+| FILE-02 | Phase 1 | Complete |
+| EDIT-01 | Phase 1 | Complete |
+| EDIT-02 | Phase 1 | Complete |
 | EDIT-03 | Phase 2 | Pending |
 | EDIT-04 | Phase 2 | Pending |
 | APPR-01 | Phase 2 | Pending |

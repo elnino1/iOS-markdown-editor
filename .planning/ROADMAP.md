@@ -33,7 +33,7 @@
 3. User can edit the opened file content as raw text with cursor control and system undo/redo
 4. User can save edits back to the original file location (changes persist when reopening in source app)
 
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 
 Plans:
 - [ ] 01-01-PLAN.md — Xcode project scaffold + MarkdownDocument (UIDocument subclass) + AppState
@@ -81,7 +81,7 @@ Plans:
 
 | Phase | Goal | Requirements | Status | Completed |
 |-------|------|--------------|--------|-----------|
-| 1 - Core | Open + edit + save | 4 (FILE-01, FILE-02, EDIT-01, EDIT-02) | Planned | - |
+| 1 - Core | 1/3 | In Progress|  | - |
 | 2 - Editor Experience | Coloring + indicator + appearance | 3 (EDIT-03, EDIT-04, APPR-01) | Not started | - |
 | 3 - Polish | Edge cases | 0 (optional) | Not started | - |
 

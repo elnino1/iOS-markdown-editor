@@ -1,3 +1,17 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: unknown
+stopped_at: Completed 01-01-PLAN.md
+last_updated: "2026-03-25T20:43:15.588Z"
+progress:
+  total_phases: 3
+  completed_phases: 0
+  total_plans: 3
+  completed_plans: 1
+---
+
 # Project State: iOS Markdown Editor
 
 **Project:** iOS Markdown Editor with Google Drive Integration
@@ -9,21 +23,15 @@
 
 ## Current Position
 
-**Milestone:** Roadmap
-**Current Phase:** Not yet started
-**Current Plan:** None
-**Overall Progress:** 0/11 requirements complete
+Phase: 01 (foundation) — EXECUTING
+Plan: 2 of 3
 
-```
-[                    ] 0%
-```
-
----
+[███░░░░░░░] 33%
 
 ## Focus
 
-**This session:** Create roadmap from 11 v1 requirements
-**Next session:** `/gsd:plan-phase 1` — Plan Phase 1 Foundation (Auth)
+**This session:** Completed Plan 01-01 — Xcode project scaffold + MarkdownDocument + AppState
+**Next session:** Execute Plan 01-02 — HomeView (file picker UI)
 
 ---
 
@@ -45,6 +53,7 @@
 ## Roadmap Status
 
 **Phases Defined:** 5
+
 - Phase 1: Foundation (Google OAuth + Drive API)
 - Phase 2: Browse (Folder hierarchy with dot folders)
 - Phase 3: Edit (Raw text editor, toolbar, appearance)
@@ -60,12 +69,14 @@
 ## Architecture Overview
 
 **Stack (from research):**
+
 - Swift 5.10+, SwiftUI, iOS 17.0+ target (iOS 16.0 minimum)
 - Google Drive REST API v3 + GoogleSignIn SDK 7.0+
 - Keychain for token storage
 - SwiftData (iOS 17+) or Core Data for app state
 
 **Major Components (delivery order):**
+
 1. AuthManager — OAuth token lifecycle, refresh, Keychain storage
 2. DriveManager — Drive API calls for file/folder listing
 3. DriveFileCache — Metadata caching
@@ -99,6 +110,9 @@ From research/SUMMARY.md:
 | OAuth 2.0 PKCE flow | Security best practice, AppReview compatible | Research | ✓ Recommended |
 | ETag-based conflict detection | Prevents silent data loss | Research | ✓ Recommended |
 | UITextView wrapping if needed | Better performance on large files (>100KB) | Research | Deferred to Phase 3 |
+| MarkdownDocument @unchecked Sendable | UIDocument is main-thread-only; @unchecked satisfies Swift 6 without changing behavior | 01-01 | ✓ Implemented |
+| Task { @MainActor } in UIDocument callbacks | Swift 6 idiom for dispatching UIDocument completion back to main actor | 01-01 | ✓ Implemented |
+| UTF-8 with isoLatin1 fallback in load() | Prevents silent corruption on non-UTF-8 encoded .md files | 01-01 | ✓ Implemented |
 
 ---
 
@@ -107,6 +121,7 @@ From research/SUMMARY.md:
 ### Initialization (2026-03-25)
 
 **Actions:**
+
 - Read PROJECT.md — confirmed core value and constraints
 - Read REQUIREMENTS.md — extracted 11 v1 requirements across 4 categories
 - Read research/SUMMARY.md — loaded phase structure recommendation and pitfalls
@@ -114,6 +129,7 @@ From research/SUMMARY.md:
 - Created roadmap with 5 phases (justified: natural workflow boundaries override coarse guidance)
 
 **Decisions:**
+
 - Phase structure: Foundation → Browse → Edit → Sync → Polish (dependency-driven)
 - Coverage: 11/11 requirements mapped, zero orphans
 - Success criteria: 4-5 observable user behaviors per phase
@@ -122,6 +138,26 @@ From research/SUMMARY.md:
 **Blockers:** None
 
 **Next:** Plan Phase 1
+
+### Plan 01-01 Execution (2026-03-25)
+
+**Actions:**
+
+- Inspected existing Xcode project scaffold (was already created with placeholders)
+- Implemented full MarkdownDocument: UIDocument subclass with load/save overrides
+- Implemented full AppState: @MainActor ObservableObject with open/close coordination
+- Auto-fixed Swift 6 concurrency warnings in UIDocument callbacks
+- Build verified: BUILD SUCCEEDED with zero Swift warnings
+
+**Decisions:**
+
+- `@unchecked Sendable` on MarkdownDocument (UIKit main-thread-only convention)
+- `Task { @MainActor }` dispatch pattern for UIDocument completion closures
+- UTF-8 + isoLatin1 fallback encoding in load(fromContents:)
+
+**Blockers:** None
+
+**Stopped at:** Completed 01-01-PLAN.md
 
 ---
 
@@ -141,12 +177,14 @@ From research/SUMMARY.md:
 ## Performance Metrics
 
 **Roadmap Quality:**
+
 - Requirement coverage: 11/11 (100%) ✓
 - Orphaned requirements: 0 ✓
 - Phase dependencies: Linear → clear execution order ✓
 - Success criteria: Observable and measurable ✓
 
 **Estimated Effort (from granularity):**
+
 - Coarse granularity suggests 3-5 phases; 5 phases used (justified by workflow dependencies)
 - Per-phase complexity: Medium (OAuth + Drive API integration, custom UI, conflict resolution)
 
