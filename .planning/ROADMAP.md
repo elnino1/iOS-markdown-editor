@@ -33,7 +33,12 @@
 3. User can edit the opened file content as raw text with cursor control and system undo/redo
 4. User can save edits back to the original file location (changes persist when reopening in source app)
 
-**Plan:** TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Xcode project scaffold + MarkdownDocument (UIDocument subclass) + AppState
+- [ ] 01-02-PLAN.md — HomeView empty state + file picker (FILE-01) + "Open With" URL handler (FILE-02)
+- [ ] 01-03-PLAN.md — EditorView raw text editing + auto-save + unsaved-changes alert (EDIT-01, EDIT-02)
 
 ---
 
@@ -76,7 +81,7 @@
 
 | Phase | Goal | Requirements | Status | Completed |
 |-------|------|--------------|--------|-----------|
-| 1 - Core | Open + edit + save | 4 (FILE-01, FILE-02, EDIT-01, EDIT-02) | Not started | - |
+| 1 - Core | Open + edit + save | 4 (FILE-01, FILE-02, EDIT-01, EDIT-02) | Planned | - |
 | 2 - Editor Experience | Coloring + indicator + appearance | 3 (EDIT-03, EDIT-04, APPR-01) | Not started | - |
 | 3 - Polish | Edge cases | 0 (optional) | Not started | - |
 
@@ -106,4 +111,4 @@ Phase 3: Polish (hardening)
 
 *Roadmap created: 2026-03-25*
 *Updated: 2026-03-25 — architectural pivot to UIDocument / document sharing model*
-*Ready for planning: `/gsd:plan-phase 1`*
+*Updated: 2026-03-25 — Phase 1 planned (3 plans)*
