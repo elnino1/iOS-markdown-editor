@@ -78,7 +78,12 @@ Plans:
 3. App handles non-UTF-8 encoded files without corrupting content
 4. Recently opened files list lets user quickly reopen previous files without re-navigating
 
-**Plan:** TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Error alerts for open failures, picker errors, and save failures (FileOperationError enum + alerts in HomeView + EditorView)
+- [ ] 03-02-PLAN.md — Large file warning + disable highlighting above 500 KB; encoding fallback notification (MarkdownDocument flag + EditorView alerts)
+- [ ] 03-03-PLAN.md — Recently opened files list (RecentFilesStore + HomeView List section with swipe-to-delete)
 
 ---
 
@@ -118,3 +123,4 @@ Phase 3: Polish (hardening)
 *Updated: 2026-03-25 — architectural pivot to UIDocument / document sharing model*
 *Updated: 2026-03-25 — Phase 1 planned (3 plans)*
 *Updated: 2026-03-25 — Phase 2 planned (3 plans: wave 0 test scaffolding, wave 1 highlighting engine, wave 2 wiring + visual checkpoint)*
+*Updated: 2026-03-26 — Phase 3 planned (3 plans: error handling, large file + encoding, recent files)*
