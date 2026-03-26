@@ -26,20 +26,20 @@
 
 ### Toolbar
 
-- [ ] **TOOL-01**: Editor shows a formatting toolbar docked above the keyboard while editing
-- [ ] **TOOL-02**: User can tap a button in the toolbar to dismiss the keyboard
+- [x] **TOOL-01**: Editor shows a formatting toolbar docked above the keyboard while editing
+- [x] **TOOL-02**: User can tap a button in the toolbar to dismiss the keyboard
 
 ### Formatting
 
-- [ ] **FMT-01**: User can tap Bold to wrap the selected text in `**markers**` (or insert `**text**` at cursor if nothing selected)
-- [ ] **FMT-02**: User can tap Italic to wrap the selected text in `*markers*` (or insert `*text*` at cursor if nothing selected)
-- [ ] **FMT-03**: User can tap Bullet to prefix the current line with `- `
-- [ ] **FMT-04**: User can tap Table to insert a 3-column × 2-row markdown table template at the cursor
+- [x] **FMT-01**: User can tap Bold to wrap the selected text in `**markers**` (or insert `**text**` at cursor if nothing selected)
+- [x] **FMT-02**: User can tap Italic to wrap the selected text in `*markers*` (or insert `*text*` at cursor if nothing selected)
+- [x] **FMT-03**: User can tap Bullet to prefix the current line with `- `
+- [x] **FMT-04**: User can tap Table to insert a 3-column × 2-row markdown table template at the cursor
 
 ### Undo / Redo
 
-- [ ] **UNDO-01**: User can tap Undo in the toolbar to undo the last edit or formatting action
-- [ ] **UNDO-02**: User can tap Redo in the toolbar to redo the last undone action
+- [x] **UNDO-01**: User can tap Undo in the toolbar to undo the last edit or formatting action
+- [x] **UNDO-02**: User can tap Redo in the toolbar to redo the last undone action
 
 ## v2 Requirements
 
@@ -76,14 +76,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EDIT-03 | Phase 2 | Complete |
 | EDIT-04 | Phase 2 | Complete |
 | APPR-01 | Phase 2 | Complete |
-| TOOL-01 | Phase 4 | Pending |
-| TOOL-02 | Phase 4 | Pending |
-| FMT-01 | Phase 4 | Pending |
-| FMT-02 | Phase 4 | Pending |
-| FMT-03 | Phase 4 | Pending |
-| FMT-04 | Phase 4 | Pending |
-| UNDO-01 | Phase 4 | Pending |
-| UNDO-02 | Phase 4 | Pending |
+| TOOL-01 | Phase 4 | Complete |
+| TOOL-02 | Phase 4 | Complete |
+| FMT-01 | Phase 4 | Complete |
+| FMT-02 | Phase 4 | Complete |
+| FMT-03 | Phase 4 | Complete |
+| FMT-04 | Phase 4 | Complete |
+| UNDO-01 | Phase 4 | Complete |
+| UNDO-02 | Phase 4 | Complete |
 
 **Coverage:**
 - v1.0 requirements: 7 total — all mapped ✓

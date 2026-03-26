@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Formatting Toolbar
-status: roadmap_complete
-stopped_at: "Phase 4 roadmapped — ready to plan"
-last_updated: "2026-03-26"
+status: unknown
+stopped_at: Completed 04-01-PLAN.md (Wave 0 failing test stubs)
+last_updated: "2026-03-26T18:11:47.239Z"
 progress:
   total_phases: 1
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 3
+  completed_plans: 1
 ---
 
 # Project State: iOS Markdown Editor
@@ -23,14 +23,8 @@ progress:
 
 ## Current Position
 
-Phase: 4 of 4 (Formatting Toolbar — v1.1)
-Plan: —
-Status: Ready to plan Phase 4
-Last activity: 2026-03-26 — v1.1 roadmap created; Phase 4 defined (8 requirements mapped)
-
-Progress: [███████░░░] ~75% (v1.0 complete; v1.1 Phase 4 not started)
-
----
+Phase: 04 (Formatting Toolbar) — EXECUTING
+Plan: 2 of 3 (plan 01 complete)
 
 ## Project Reference
 
@@ -76,13 +70,14 @@ From research/SUMMARY.md:
 | SwiftUI .toolbar(placement: .keyboard) | Simpler than inputAccessoryView; iOS 16+ supported | ✓ Planned |
 | UITextInput protocol for all text changes | Integrates with UndoManager; avoids undo stack corruption | ✓ Planned |
 | Atomic undo grouping for bold/italic wrapping | Two insertions must undo as one step | ✓ Planned |
+| New Swift test files must be registered in project.pbxproj | Files on disk are not auto-discovered by Xcode; PBXBuildFile + PBXFileReference entries required | ✓ 04-01 |
 
 ---
 
 ## Session Continuity
 
-Last session: 2026-03-26
-Stopped at: v1.1 roadmap created — Phase 4 defined with 8 requirements and 6 success criteria
+Last session: 2026-03-26T18:11:47.236Z
+Stopped at: Completed 04-01-PLAN.md (Wave 0 failing test stubs)
 Resume file: None
 
 ---
