@@ -18,6 +18,7 @@
 		A100000A /* HighlightingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001A /* HighlightingService.swift */; };
 		A100000B /* MarkdownTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001B /* MarkdownTextEditor.swift */; };
 		A100000C /* RecentFilesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001C /* RecentFilesStore.swift */; };
+		A100000D /* FormattingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001D /* FormattingService.swift */; };
 		A2000001 /* MarkdownHighlighterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000011 /* MarkdownHighlighterTests.swift */; };
 		A2000002 /* UnsavedChangesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000012 /* UnsavedChangesTests.swift */; };
 		A2000003 /* FormattingOperationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000013 /* FormattingOperationsTests.swift */; };
@@ -49,6 +50,7 @@
 		A100001A /* HighlightingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightingService.swift; sourceTree = "<group>"; };
 		A100001B /* MarkdownTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownTextEditor.swift; sourceTree = "<group>"; };
 		A100001C /* RecentFilesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentFilesStore.swift; sourceTree = "<group>"; };
+		A100001D /* FormattingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattingService.swift; sourceTree = "<group>"; };
 		A2000010 /* MarkdownEditorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarkdownEditorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2000011 /* MarkdownHighlighterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownHighlighterTests.swift; sourceTree = "<group>"; };
 		A2000012 /* UnsavedChangesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsavedChangesTests.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 				A100001A /* HighlightingService.swift */,
 				A100001B /* MarkdownTextEditor.swift */,
 				A100001C /* RecentFilesStore.swift */,
+				A100001D /* FormattingService.swift */,
 				A1000015 /* Assets.xcassets */,
 				A1000016 /* Info.plist */,
 			);
@@ -230,6 +233,7 @@
 				A100000A /* HighlightingService.swift in Sources */,
 				A100000B /* MarkdownTextEditor.swift in Sources */,
 				A100000C /* RecentFilesStore.swift in Sources */,
+				A100000D /* FormattingService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
