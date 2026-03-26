@@ -121,7 +121,7 @@ Plans:
 5. User can tap Bullet to prefix the current line with `- `, and tap Table to insert a 3-column x 2-row markdown table template at the cursor
 6. User can tap Undo and Redo in the toolbar to step through edit history including toolbar-applied formatting
 
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 
 Plans:
 - [ ] 04-01-PLAN.md — XCTest stubs (Wave 0): failing test scaffolding for all 8 requirements
@@ -137,7 +137,7 @@ Plans:
 | 1. Core | v1.0 | 3/3 | Complete | 2026-03-25 |
 | 2. Editor Experience | v1.0 | 3/3 | Complete | 2026-03-26 |
 | 3. Polish | v1.0 | 3/3 | Complete | 2026-03-26 |
-| 4. Formatting Toolbar | 1/3 | In Progress|  | - |
+| 4. Formatting Toolbar | 2/3 | In Progress|  | - |
 
 ---
 

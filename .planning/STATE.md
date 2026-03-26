@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Formatting Toolbar
 status: unknown
-stopped_at: Completed 04-01-PLAN.md (Wave 0 failing test stubs)
-last_updated: "2026-03-26T18:11:47.239Z"
+stopped_at: Completed 04-02-PLAN.md (FormattingService + Coordinator methods)
+last_updated: "2026-03-26T19:39:00.000Z"
 progress:
   total_phases: 1
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State: iOS Markdown Editor
@@ -24,7 +24,7 @@ progress:
 ## Current Position
 
 Phase: 04 (Formatting Toolbar) — EXECUTING
-Plan: 2 of 3 (plan 01 complete)
+Plan: 3 of 3 (plans 01-02 complete)
 
 ## Project Reference
 
@@ -71,13 +71,15 @@ From research/SUMMARY.md:
 | UITextInput protocol for all text changes | Integrates with UndoManager; avoids undo stack corruption | ✓ Planned |
 | Atomic undo grouping for bold/italic wrapping | Two insertions must undo as one step | ✓ Planned |
 | New Swift test files must be registered in project.pbxproj | Files on disk are not auto-discovered by Xcode; PBXBuildFile + PBXFileReference entries required | ✓ 04-01 |
+| FormattingService as enum with static methods | No instance needed; clean separation from Coordinator; fully unit-testable | ✓ 04-02 |
+| text = tv.text sync in Coordinator apply* methods | Syncs SwiftUI binding without triggering textViewDidChange delegate (programmatic changes don't fire delegate) | ✓ 04-02 |
 
 ---
 
 ## Session Continuity
 
-Last session: 2026-03-26T18:11:47.236Z
-Stopped at: Completed 04-01-PLAN.md (Wave 0 failing test stubs)
+Last session: 2026-03-26T19:39:00.000Z
+Stopped at: Completed 04-02-PLAN.md (FormattingService + Coordinator methods)
 Resume file: None
 
 ---
