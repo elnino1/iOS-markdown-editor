@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -50,6 +50,10 @@
 		A2000011 /* MarkdownHighlighterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownHighlighterTests.swift; sourceTree = "<group>"; };
 		A2000012 /* UnsavedChangesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsavedChangesTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		367D5FD02F754FC5006FF4EE /* .github */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = .github; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A1000020 /* Frameworks */ = {
@@ -100,6 +104,7 @@
 		A1000032 = {
 			isa = PBXGroup;
 			children = (
+				367D5FD02F754FC5006FF4EE /* .github */,
 				A1000031 /* MarkdownEditor */,
 				A2000031 /* MarkdownEditorTests */,
 				A1000030 /* Products */,

@@ -123,6 +123,16 @@ None - no external service configuration required.
 - EditorView (Plan 03) will bind to AppState.document.text and call updateChangeCount(.done) for auto-save
 - The "Open With" flow is fully wired; testing requires a physical device or simulator with Google Drive app installed
 
+## Self-Check: PASSED
+
+- FOUND: MarkdownEditor/MarkdownDocument.swift
+- FOUND: MarkdownEditor/AppState.swift
+- FOUND: MarkdownEditor/MarkdownEditorApp.swift
+- FOUND: .planning/phases/01-foundation/01-01-SUMMARY.md
+- FOUND commit: 557527d (Task 1)
+- FOUND commit: 9452a37 (Task 2)
+- FOUND commit: c801cc2 (metadata)
+
 ---
 *Phase: 01-foundation*
 *Completed: 2026-03-25*
