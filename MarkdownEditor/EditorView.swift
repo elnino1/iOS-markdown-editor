@@ -13,23 +13,22 @@ struct EditorView: View {
         NavigationStack {
             Group {
                 if let doc = document {
-                    TextEditor(text: Binding(
-                        get: { doc.text },
-                        set: { newValue in
-                            doc.text = newValue
-                            scheduleSave(for: doc)
-                        }
-                    ))
-                    .font(.body.monospaced())
-                    .scrollContentBackground(.hidden)
-                    .background(Color(.systemBackground))
+                    MarkdownTextEditor(
+                        text: Binding(
+                            get: { doc.text },
+                            set: { newValue in
+                                doc.text = newValue
+                                scheduleSave(for: doc)
+                            }
+                        )
+                    )
                     .ignoresSafeArea(.keyboard)
                 } else {
                     Text("No file open")
                         .foregroundStyle(.secondary)
                 }
             }
-            .navigationTitle(document?.fileURL.lastPathComponent ?? "Editor")
+            .navigationTitle(buildTitle())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -103,6 +102,18 @@ struct EditorView: View {
         doc.save(to: doc.fileURL, for: .forOverwriting) { _ in
             completion()
         }
+    }
+
+    // MARK: - Title
+
+    /// Returns filename with " *" suffix when document has unsaved changes.
+    /// Reads UIDocument.hasUnsavedChanges directly each time view re-renders.
+    /// View re-renders when doc.text changes via the Binding setter above, so
+    /// the title updates on each keystroke debounce cycle.
+    private func buildTitle() -> String {
+        let filename = document?.fileURL.lastPathComponent ?? "Editor"
+        let unsavedMarker = (document?.hasUnsavedChanges ?? false) ? " *" : ""
+        return filename + unsavedMarker
     }
 
     // MARK: - Close
