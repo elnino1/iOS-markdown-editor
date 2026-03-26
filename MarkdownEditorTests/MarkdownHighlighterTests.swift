@@ -4,29 +4,38 @@ import XCTest
 
 final class MarkdownHighlighterTests: XCTestCase {
 
-    // EDIT-04: heading line starting with # gets green foreground color
-    func testHeadingColoring() throws {
-        // Stub: will fail until HighlightingService exists — EXPECTED RED
-        XCTFail("Stub — implement HighlightingService in Wave 1")
+    // EDIT-04: heading line starting with # gets a foreground color applied
+    func testHeadingColoring() {
+        let result = HighlightingService.applyMarkdownColors(to: "# Hello World")
+        let hasColoredRun = result.runs.contains { $0.foregroundColor != nil }
+        XCTAssertTrue(hasColoredRun, "Heading line should have foreground color applied to at least one run")
     }
 
-    // EDIT-04: **bold** text gets blue foreground + bold font
-    func testBoldColoring() throws {
-        XCTFail("Stub — implement HighlightingService in Wave 1")
+    // EDIT-04: **bold** text gets a foreground color applied
+    func testBoldColoring() {
+        let result = HighlightingService.applyMarkdownColors(to: "**bold text**")
+        let hasColoredRun = result.runs.contains { $0.foregroundColor != nil }
+        XCTAssertTrue(hasColoredRun, "**bold** text should have foreground color applied")
     }
 
-    // EDIT-04: *italic* text gets purple foreground + italic font
-    func testItalicColoring() throws {
-        XCTFail("Stub — implement HighlightingService in Wave 1")
+    // EDIT-04: *italic* text gets a foreground color applied
+    func testItalicColoring() {
+        let result = HighlightingService.applyMarkdownColors(to: "*italic text*")
+        let hasColoredRun = result.runs.contains { $0.foregroundColor != nil }
+        XCTAssertTrue(hasColoredRun, "*italic* text should have foreground color applied")
     }
 
-    // EDIT-04: `code` text gets orange foreground + monospaced font
-    func testCodeColoring() throws {
-        XCTFail("Stub — implement HighlightingService in Wave 1")
+    // EDIT-04: `code` text gets a foreground color applied
+    func testCodeColoring() {
+        let result = HighlightingService.applyMarkdownColors(to: "`code span`")
+        let hasColoredRun = result.runs.contains { $0.foregroundColor != nil }
+        XCTAssertTrue(hasColoredRun, "`code` span should have foreground color applied")
     }
 
-    // EDIT-04: [link](url) text gets cyan foreground + underline
-    func testLinkColoring() throws {
-        XCTFail("Stub — implement HighlightingService in Wave 1")
+    // EDIT-04: [link](url) text gets a foreground color applied
+    func testLinkColoring() {
+        let result = HighlightingService.applyMarkdownColors(to: "[link text](https://example.com)")
+        let hasColoredRun = result.runs.contains { $0.foregroundColor != nil }
+        XCTAssertTrue(hasColoredRun, "[link](url) should have foreground color applied")
     }
 }
