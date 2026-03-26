@@ -47,6 +47,8 @@ class AppState: ObservableObject {
     @Published var isEditorPresented: Bool = false
     @Published var pendingOpenURL: URL? = nil  // signals EditorView to show unsaved-changes alert
     @Published var openError: FileOperationError? = nil   // non-nil triggers error alert in HomeView
+    @Published var largeFileWarning: Bool = false         // true when opened file > 500 KB
+    @Published var encodingFallbackWarning: Bool = false  // true when latin1 fallback was used
 
     // Retain the security-scoped URL so we can stop access when the document closes
     private var securityScopedURL: URL? = nil
@@ -83,6 +85,11 @@ class AppState: ObservableObject {
                 if success {
                     self.document = doc
                     self.isEditorPresented = true
+                    // Check file size: warn if > 500 KB (512_000 bytes in utf8 approximation)
+                    let byteCount = doc.text.utf8.count
+                    self.largeFileWarning = byteCount > 512_000
+                    // Check encoding fallback
+                    self.encodingFallbackWarning = doc.usedEncodingFallback
                 } else {
                     // Open failed — release security-scoped resource, surface error to user
                     self.securityScopedURL?.stopAccessingSecurityScopedResource()
@@ -108,6 +115,8 @@ class AppState: ObservableObject {
                 self?.document = nil
                 self?.isEditorPresented = false
                 self?.securityScopedURL = nil
+                self?.largeFileWarning = false
+                self?.encodingFallbackWarning = false
                 scopedURL?.stopAccessingSecurityScopedResource()
                 completion?()
             }
