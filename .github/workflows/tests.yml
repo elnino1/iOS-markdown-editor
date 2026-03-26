@@ -1,0 +1,35 @@
+name: Tests
+
+on:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  test:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_16.3.app
+
+      - name: Run tests
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project MarkdownEditor.xcodeproj \
+            -scheme MarkdownEditor \
+            -destination 'platform=iOS Simulator,OS=18.4,name=iPhone 16' \
+            -skipPackagePluginValidation \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            | xcpretty --color
+        env:
+          NSUnbufferedIO: YES
