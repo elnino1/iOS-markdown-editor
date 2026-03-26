@@ -1,11 +1,52 @@
 import Foundation
 import Combine
 
+// MARK: - FileOperationError
+
+enum FileOperationError: Identifiable {
+    case permissionDenied
+    case fileNotFound
+    case unreadable
+    case saveFailed
+    case unknown
+
+    var id: String { title }
+
+    var title: String { "Couldn't Open File" }
+
+    var message: String {
+        switch self {
+        case .permissionDenied: return "You don't have permission to open this file."
+        case .fileNotFound:     return "The file could not be found. It may have been moved or deleted."
+        case .unreadable:       return "Couldn't read this file. It may be damaged or in an unsupported format."
+        case .saveFailed:       return "Changes couldn't be saved. Check that the file is still accessible."
+        case .unknown:          return "Something went wrong. Please try again."
+        }
+    }
+
+    static func from(_ error: Error) -> FileOperationError {
+        let code = (error as? CocoaError)?.code
+        switch code {
+        case .fileReadNoPermission, .fileWriteNoPermission:
+            return .permissionDenied
+        case .fileNoSuchFile, .fileReadNoSuchFile:
+            return .fileNotFound
+        case .fileReadCorruptFile, .fileReadUnknown:
+            return .unreadable
+        default:
+            return .unknown
+        }
+    }
+}
+
+// MARK: - AppState
+
 @MainActor
 class AppState: ObservableObject {
     @Published var document: MarkdownDocument? = nil
     @Published var isEditorPresented: Bool = false
     @Published var pendingOpenURL: URL? = nil  // signals EditorView to show unsaved-changes alert
+    @Published var openError: FileOperationError? = nil   // non-nil triggers error alert in HomeView
 
     // Retain the security-scoped URL so we can stop access when the document closes
     private var securityScopedURL: URL? = nil
@@ -43,9 +84,12 @@ class AppState: ObservableObject {
                     self.document = doc
                     self.isEditorPresented = true
                 } else {
-                    // Open failed — release the security-scoped resource immediately
+                    // Open failed — release security-scoped resource, surface error to user
                     self.securityScopedURL?.stopAccessingSecurityScopedResource()
                     self.securityScopedURL = nil
+                    // UIDocument.open does not expose the underlying error directly;
+                    // surface a generic open failure to the user.
+                    self.openError = .unknown
                 }
             }
         }
