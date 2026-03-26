@@ -86,10 +86,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UNDO-02 | Phase 4 | Pending |
 
 **Coverage:**
-- v1.1 requirements: 8 total
-- Mapped to phases: TBD (roadmapper will assign)
-- Unmapped: 8 ⚠️ (pending roadmap)
+- v1.0 requirements: 7 total — all mapped ✓
+- v1.1 requirements: 8 total — all mapped to Phase 4 ✓
+- Unmapped: 0
+
+✓ **100% requirement coverage validated**
 
 ---
 *Requirements defined: 2026-03-25*
-*Last updated: 2026-03-26 — v1.1 milestone: formatting toolbar (8 new requirements)*
+*Last updated: 2026-03-26 — v1.1 traceability complete: 8 requirements mapped to Phase 4*
