@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-03-PLAN.md
-last_updated: "2026-03-25T21:24:48.006Z"
+stopped_at: Completed 02-00-PLAN.md
+last_updated: "2026-03-26T06:49:44Z"
 progress:
   total_phases: 3
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 6
+  completed_plans: 4
 ---
 
 # Project State: iOS Markdown Editor
@@ -23,15 +23,13 @@ progress:
 
 ## Current Position
 
-Phase: 01 (foundation) — COMPLETE
-Plan: 3 of 3
-
-[██████████] 100%
+Phase: 02 (editor-experience) — EXECUTING
+Plan: 2 of 3
 
 ## Focus
 
-**This session:** Completed Plan 01-03 — EditorView (raw text editor + auto-save + unsaved-changes guard)
-**Next session:** Begin Phase 2 — Browse (folder hierarchy with dot folder support)
+**This session:** Completed Plan 02-00 — XCTest target setup with TDD stubs for EDIT-03 and EDIT-04
+**Next session:** Execute Phase 2 Wave 1 (02-01) — syntax highlighting implementation
 
 ---
 
@@ -119,6 +117,8 @@ From research/SUMMARY.md:
 | iOS 16 compatible onChange | Used single-argument .onChange(of:) { value in } form (iOS 14+); plan's two-argument form requires iOS 17+ | 01-03 | ✓ Implemented |
 | pendingOpenURL in AppState | Enables open(url:) from any source (onOpenURL, file picker) to trigger unsaved-changes alert without EditorView intercepting every call | 01-03 | ✓ Implemented |
 | 1.5s auto-save delay | Within CONTEXT.md 1-2s discretion range; balances responsiveness and disk write frequency | 01-03 | ✓ Implemented |
+| Pure XCTFail stubs (no type references) | Ensures test target compiles before Wave 1 implementation exists; avoids "cannot find type in scope" errors | 02-00 | ✓ Implemented |
+| matchRanges helper separates regex from attribute mutation | Fixes Swift exclusive access: collect NSRange matches first, convert to AttributedString.Index, then apply in separate loop | 02-00 | ✓ Implemented |
 
 ---
 
@@ -206,6 +206,26 @@ From research/SUMMARY.md:
 **Blockers:** None
 
 **Stopped at:** Completed 01-03-PLAN.md
+
+### Plan 02-00 Execution (2026-03-26)
+
+**Actions:**
+
+- Created MarkdownEditorTests/ directory with two TDD stub files
+- Manually edited project.pbxproj to add XCTest target (PBXNativeTarget, build phases, config list, file references, target dependency)
+- Fixed stub: removed HighlightingService reference from testHeadingColoring (caused compile error before Wave 1 exists)
+- Fixed bug: rewrote HighlightingService.applyMarkdownColors to use matchRanges helper, eliminating inout + closure capture exclusive access violation
+- Committed externally pre-landed ThemeColors.swift, HighlightingService.swift, MarkdownTextEditor.swift as part of this task
+- Build verified: TEST BUILD SUCCEEDED
+
+**Decisions:**
+
+- Pure XCTFail stubs (no type references) for compile-time safety
+- matchRanges helper pattern to avoid Swift exclusive access errors
+
+**Blockers:** None
+
+**Stopped at:** Completed 02-00-PLAN.md
 
 ---
 

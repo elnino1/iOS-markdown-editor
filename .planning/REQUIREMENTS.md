@@ -15,8 +15,8 @@
 
 - [x] **EDIT-01**: User can edit the opened file as raw text
 - [x] **EDIT-02**: User can save edits back to the original file location
-- [ ] **EDIT-03**: App shows a visual indicator when there are unsaved changes
-- [ ] **EDIT-04**: Editor applies markdown syntax coloring
+- [x] **EDIT-03**: App shows a visual indicator when there are unsaved changes
+- [x] **EDIT-04**: Editor applies markdown syntax coloring
 
 ### Appearance
 
@@ -51,8 +51,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FILE-02 | Phase 1 | Complete |
 | EDIT-01 | Phase 1 | Complete |
 | EDIT-02 | Phase 1 | Complete |
-| EDIT-03 | Phase 2 | Pending |
-| EDIT-04 | Phase 2 | Pending |
+| EDIT-03 | Phase 2 | Complete |
+| EDIT-04 | Phase 2 | Complete |
 | APPR-01 | Phase 2 | Pending |
 
 **Coverage:**

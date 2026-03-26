@@ -55,7 +55,7 @@ Plans:
 2. App shows a clear visual indicator when file has unsaved changes (e.g. dot in title bar, modified badge)
 3. App looks correct in both light and dark mode throughout all screens
 
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 
 Plans:
 - [ ] 02-00-PLAN.md — XCTest target scaffold + failing test stubs for EDIT-03, EDIT-04
@@ -87,7 +87,7 @@ Plans:
 | Phase | Goal | Requirements | Status | Completed |
 |-------|------|--------------|--------|-----------|
 | 1 - Core | 3/3 | Complete   | 2026-03-25 | - |
-| 2 - Editor Experience | Coloring + indicator + appearance | 3 (EDIT-03, EDIT-04, APPR-01) | In planning | - |
+| 2 - Editor Experience | 1/3 | In Progress|  | - |
 | 3 - Polish | Edge cases | 0 (optional) | Not started | - |
 
 ---
