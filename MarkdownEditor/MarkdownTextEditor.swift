@@ -13,6 +13,7 @@ struct MarkdownTextEditor: UIViewRepresentable {
     func makeUIView(context: Context) -> UITextView {
         let tv = UITextView()
         tv.delegate = context.coordinator
+        context.coordinator.textView = tv
         tv.isScrollEnabled = true
         tv.isEditable = true
         tv.isSelectable = true
@@ -51,12 +52,41 @@ struct MarkdownTextEditor: UIViewRepresentable {
         let font: UIFont
         var isHighlightingEnabled: Bool
         private var highlightTimer: AnyCancellable?
+        weak var textView: UITextView?
 
         init(text: Binding<String>, font: UIFont, isHighlightingEnabled: Bool) {
             _text = text
             self.font = font
             self.isHighlightingEnabled = isHighlightingEnabled
         }
+
+        // MARK: - Formatting Methods
+
+        func applyBold() {
+            guard let tv = textView else { return }
+            FormattingService.applyBold(to: tv)
+            text = tv.text
+        }
+
+        func applyItalic() {
+            guard let tv = textView else { return }
+            FormattingService.applyItalic(to: tv)
+            text = tv.text
+        }
+
+        func applyBullet() {
+            guard let tv = textView else { return }
+            FormattingService.applyBullet(to: tv)
+            text = tv.text
+        }
+
+        func insertTable() {
+            guard let tv = textView else { return }
+            FormattingService.insertTable(to: tv)
+            text = tv.text
+        }
+
+        // MARK: - UITextViewDelegate
 
         func textViewDidChange(_ textView: UITextView) {
             text = textView.text
