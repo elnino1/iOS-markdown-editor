@@ -1,21 +1,21 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: unknown
-stopped_at: Completed 03-03-PLAN.md
-last_updated: "2026-03-26T09:28:35.965Z"
+milestone: v1.1
+milestone_name: Formatting Toolbar
+status: defining_requirements
+stopped_at: —
+last_updated: "2026-03-26"
 progress:
-  total_phases: 3
-  completed_phases: 3
-  total_plans: 9
-  completed_plans: 9
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
 ---
 
 # Project State: iOS Markdown Editor
 
-**Project:** iOS Markdown Editor with Google Drive Integration
-**Core Value:** Users can browse, edit, and save markdown files anywhere in Google Drive — including dot folders that other apps hide.
+**Project:** iOS Markdown Editor
+**Core Value:** A focused markdown editor that works with any file source — open from anywhere, edit, save back.
 
 **Initialized:** 2026-03-25
 
@@ -23,13 +23,10 @@ progress:
 
 ## Current Position
 
-Phase: 03 (polish) — EXECUTING
-Plan: 1 of 3
-
-## Focus
-
-**This session:** Completed Plan 02-00 — XCTest target setup with TDD stubs for EDIT-03 and EDIT-04
-**Next session:** Execute Phase 2 Wave 1 (02-01) — syntax highlighting implementation
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-03-26 — Milestone v1.1 started
 
 ---
 

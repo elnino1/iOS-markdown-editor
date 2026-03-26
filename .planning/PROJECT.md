@@ -8,20 +8,40 @@ A free iOS app for editing markdown files from any location — local storage, i
 
 A focused markdown editor that works with any file source — open from anywhere, edit, save back. No account required, no lock-in.
 
+## Current Milestone: v1.1 Formatting Toolbar
+
+**Goal:** Add a keyboard-docked formatting toolbar so users can apply markdown syntax without typing manually.
+
+**Target features:**
+- Bold / italic buttons that wrap selected text (or insert at cursor)
+- Bullet list button that prefixes the current line with `- `
+- Table insertion button that inserts a default 3-column × 2-row markdown table
+- Undo / Redo buttons backed by the system UITextView UndoManager
+
 ## Requirements
 
 ### Validated
 
-- [x] User can open a markdown file using the in-app file picker — Validated in Phase 01: Foundation
-- [x] User can open a markdown file via "Open With" from another app (Google Drive, Files, etc.) — Validated in Phase 01: Foundation
-- [x] User can edit the opened file as raw text — Validated in Phase 01: Foundation
-- [x] User can save edits back to the original file location — Validated in Phase 01: Foundation
+- ✓ User can open a markdown file using the in-app file picker — Phase 1
+- ✓ User can open a markdown file via "Open With" from another app — Phase 1
+- ✓ User can edit the opened file as raw text — Phase 1
+- ✓ User can save edits back to the original file location — Phase 1
+- ✓ Editor shows a visual indicator when there are unsaved changes — Phase 2
+- ✓ Editor applies markdown syntax coloring — Phase 2
+- ✓ App supports light and dark mode — Phase 2
+- ✓ Error handling for open/save failures — Phase 3
+- ✓ Large file warning with highlighting fallback — Phase 3
+- ✓ Recently opened files list — Phase 3
 
 ### Active
 
-- [ ] Editor shows a visual indicator when there are unsaved changes
-- [ ] Editor applies markdown syntax coloring
-- [ ] App supports light and dark mode
+- [ ] Formatting toolbar appears above the keyboard while editing
+- [ ] Bold button wraps selected text in `**markers**` (or inserts at cursor if no selection)
+- [ ] Italic button wraps selected text in `*markers*` (or inserts at cursor if no selection)
+- [ ] Bullet list button prefixes the current line with `- `
+- [ ] Table button inserts a 3-column × 2-row markdown table template at the cursor
+- [ ] Undo button triggers system undo on the text view
+- [ ] Redo button triggers system redo on the text view
 
 ### Out of Scope
 
@@ -58,4 +78,4 @@ A focused markdown editor that works with any file source — open from anywhere
 | UIDocument for file coordination | iOS standard for read/write back to original location | ✓ Implemented |
 
 ---
-*Last updated: 2026-03-25 — Phase 01 complete: open-edit-save loop fully implemented*
+*Last updated: 2026-03-26 — Milestone v1.1 started: formatting toolbar*
