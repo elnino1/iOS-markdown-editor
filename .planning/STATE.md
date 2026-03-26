@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-01-PLAN.md
-last_updated: "2026-03-26T09:11:30.290Z"
+stopped_at: Completed 03-02-PLAN.md
+last_updated: "2026-03-26T09:19:21.725Z"
 progress:
   total_phases: 3
   completed_phases: 2
   total_plans: 9
-  completed_plans: 7
+  completed_plans: 8
 ---
 
 # Project State: iOS Markdown Editor
@@ -124,6 +124,8 @@ From research/SUMMARY.md:
 | Test buildTitle as pure string logic in UnsavedChangesTests | UIDocument instantiation not needed; XCTest cannot host @EnvironmentObject views without a full SwiftUI app host | 02-02 | ✓ Implemented |
 | UIDocument open failures surface as .unknown | UIDocument.open has no public error property; plan's doc.error reference doesn't compile; .unknown is the appropriate fallback | 03-01 | ✓ Implemented |
 | Try Again reopens picker via both paths | Simulator uses DocumentPickerPresenter; device uses isPickerPresented = true; alert handler branches on targetEnvironment | 03-01 | ✓ Implemented |
+| highlightingDisabled is @State in EditorView | Keeps highlighting off after alert dismissal; derived from largeFileWarning would re-enable on dismiss | 03-02 | ✓ Implemented |
+| onChange(isEditorPresented) resets highlightingDisabled | Fires before largeFileWarning onChange; allows correct re-disable if new file is also large | 03-02 | ✓ Implemented |
 
 ---
 
@@ -252,6 +254,27 @@ From research/SUMMARY.md:
 **Blockers:** None
 
 **Stopped at:** Paused at Task 2 checkpoint (human-verify) in 02-02-PLAN.md
+
+### Plan 03-02 Execution (2026-03-26)
+
+**Actions:**
+
+- Added usedEncodingFallback: Bool to MarkdownDocument; updated load(fromContents:) with explicit if/else branches to set flag
+- Added @Published largeFileWarning and encodingFallbackWarning to AppState; set in _openDirectly success branch; reset in closeCurrentDocument
+- Added isHighlightingEnabled parameter to MarkdownTextEditor; updateUIView renders plain text when false; Coordinator guards debounce highlight
+- Added @State highlightingDisabled, showLargeFileAlert, showEncodingAlert to EditorView
+- Added onChange(largeFileWarning), onChange(encodingFallbackWarning), onChange(isEditorPresented) observers in EditorView
+- Added "Large File" and "Encoding Changed" alert modifiers to EditorView
+- All 8 tests pass: TEST SUCCEEDED
+
+**Decisions:**
+
+- highlightingDisabled is @State (not derived from largeFileWarning) so alert dismissal does not re-enable highlighting
+- onChange(isEditorPresented) resets highlightingDisabled on new session; largeFileWarning onChange fires after and re-disables if needed
+
+**Blockers:** None
+
+**Stopped at:** Completed 03-02-PLAN.md
 
 ### Plan 03-01 Execution (2026-03-26)
 
