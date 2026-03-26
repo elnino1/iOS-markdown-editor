@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Phase 3 context gathered
-last_updated: "2026-03-26T08:55:14.094Z"
+stopped_at: Completed 03-01-PLAN.md
+last_updated: "2026-03-26T09:11:30.290Z"
 progress:
   total_phases: 3
   completed_phases: 2
-  total_plans: 6
-  completed_plans: 6
+  total_plans: 9
+  completed_plans: 7
 ---
 
 # Project State: iOS Markdown Editor
@@ -23,7 +23,7 @@ progress:
 
 ## Current Position
 
-Phase: 02 (editor-experience) — EXECUTING
+Phase: 03 (polish) — EXECUTING
 Plan: 1 of 3
 
 ## Focus
@@ -122,6 +122,8 @@ From research/SUMMARY.md:
 | Read UIDocument.hasUnsavedChanges directly in buildTitle() | No @Published isModified in AppState — avoids sync bugs (Pitfall 3 from research) | 02-02 | ✓ Implemented |
 | Remove SwiftUI modifiers from MarkdownTextEditor call site | .font/.background/.scrollContentBackground are no-ops on UIViewRepresentable; UITextView handles them internally | 02-02 | ✓ Implemented |
 | Test buildTitle as pure string logic in UnsavedChangesTests | UIDocument instantiation not needed; XCTest cannot host @EnvironmentObject views without a full SwiftUI app host | 02-02 | ✓ Implemented |
+| UIDocument open failures surface as .unknown | UIDocument.open has no public error property; plan's doc.error reference doesn't compile; .unknown is the appropriate fallback | 03-01 | ✓ Implemented |
+| Try Again reopens picker via both paths | Simulator uses DocumentPickerPresenter; device uses isPickerPresented = true; alert handler branches on targetEnvironment | 03-01 | ✓ Implemented |
 
 ---
 
@@ -166,7 +168,7 @@ From research/SUMMARY.md:
 
 **Blockers:** None
 
-**Stopped at:** Phase 3 context gathered
+**Stopped at:** Completed 03-01-PLAN.md
 
 ### Plan 01-02 Execution (2026-03-25)
 
@@ -250,6 +252,29 @@ From research/SUMMARY.md:
 **Blockers:** None
 
 **Stopped at:** Paused at Task 2 checkpoint (human-verify) in 02-02-PLAN.md
+
+### Plan 03-01 Execution (2026-03-26)
+
+**Actions:**
+
+- Added FileOperationError enum (5 typed cases, CocoaError mapping, user-friendly messages) to AppState.swift
+- Added @Published var openError: FileOperationError? to AppState
+- Updated _openDirectly else branch to publish openError (.unknown) instead of silent drop
+- Updated HomeView .fileImporter .failure branch to set appState.openError via FileOperationError.from(error)
+- Added HomeView .alert driven by appState.openError with Try Again (reopens picker) and Cancel
+- Added @State showSaveError and success check in EditorView.saveImmediately
+- Added dismiss-only "Save Failed" .alert to EditorView
+- All 8 tests pass: TEST SUCCEEDED
+
+**Decisions:**
+
+- UIDocument.open has no public error property; open failures surface as .unknown (auto-fixed plan inaccuracy)
+- Try Again button routes through both simulator (DocumentPickerPresenter) and device (.fileImporter) paths
+- Save Failed alert placed after Unsaved Changes alert using SwiftUI multi-alert chaining
+
+**Blockers:** None
+
+**Stopped at:** Completed 03-01-PLAN.md
 
 ---
 

@@ -78,7 +78,7 @@ Plans:
 3. App handles non-UTF-8 encoded files without corrupting content
 4. Recently opened files list lets user quickly reopen previous files without re-navigating
 
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 
 Plans:
 - [ ] 03-01-PLAN.md — Error alerts for open failures, picker errors, and save failures (FileOperationError enum + alerts in HomeView + EditorView)
@@ -93,7 +93,7 @@ Plans:
 |-------|------|--------------|--------|-----------|
 | 1 - Core | 3/3 | Complete   | 2026-03-25 | - |
 | 2 - Editor Experience | 1/3 | In Progress|  | - |
-| 3 - Polish | Edge cases | 0 (optional) | Not started | - |
+| 3 - Polish | 1/3 | In Progress|  | - |
 
 ---
 
