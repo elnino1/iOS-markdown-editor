@@ -1,5 +1,4 @@
 import SwiftUI
-import UIKit
 import UniformTypeIdentifiers
 
 struct HomeView: View {
@@ -25,10 +24,7 @@ struct HomeView: View {
                 }
 
                 Button("Open File") {
-                    DocumentPickerPresenter.present { url in
-                        print("HomeView: picker selected \(url.lastPathComponent)")
-                        appState.open(url: url)
-                    }
+                    isPickerPresented = true
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
@@ -43,60 +39,21 @@ struct HomeView: View {
                 EditorView()
                     .environmentObject(appState)
             }
-        }
-    }
-}
-
-// MARK: - DocumentPickerPresenter
-
-/// Presents UIDocumentPickerViewController from the window's root view controller.
-/// Keeps a strong reference to the coordinator so the delegate isn't deallocated mid-presentation.
-enum DocumentPickerPresenter {
-
-    private static var activeCoordinator: Coordinator?
-
-    static func present(onPick: @escaping (URL) -> Void) {
-        guard let presenter = topViewController() else {
-            print("DocumentPickerPresenter: could not find presenter")
-            return
-        }
-
-        let coordinator = Coordinator(onPick: onPick)
-        activeCoordinator = coordinator  // retain until delegate fires
-
-        let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.item])
-        picker.delegate = coordinator
-        picker.allowsMultipleSelection = false
-        print("DocumentPickerPresenter: presenting from \(type(of: presenter))")
-        presenter.present(picker, animated: true)
-    }
-
-    private static func topViewController() -> UIViewController? {
-        guard
-            let scene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
-            let window = scene.keyWindow
-        else { return nil }
-
-        var top = window.rootViewController
-        while let presented = top?.presentedViewController {
-            top = presented
-        }
-        return top
-    }
-
-    final class Coordinator: NSObject, UIDocumentPickerDelegate {
-        let onPick: (URL) -> Void
-        init(onPick: @escaping (URL) -> Void) { self.onPick = onPick }
-
-        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-            DocumentPickerPresenter.activeCoordinator = nil
-            guard let url = urls.first else { return }
-            onPick(url)
-        }
-
-        func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-            print("DocumentPickerPresenter: cancelled")
-            DocumentPickerPresenter.activeCoordinator = nil
+            .fileImporter(
+                isPresented: $isPickerPresented,
+                allowedContentTypes: [.item],
+                allowsMultipleSelection: false
+            ) { result in
+                switch result {
+                case .success(let urls):
+                    print("HomeView: fileImporter fired — \(urls.count) url(s)")
+                    guard let url = urls.first else { return }
+                    print("HomeView: fileImporter selected \(url.lastPathComponent)")
+                    appState.open(url: url)
+                case .failure(let error):
+                    print("HomeView: fileImporter error — \(error)")
+                }
+            }
         }
     }
 }
