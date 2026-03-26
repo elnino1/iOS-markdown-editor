@@ -4,7 +4,6 @@ import UniformTypeIdentifiers
 
 struct HomeView: View {
     @EnvironmentObject private var appState: AppState
-    @State private var isPickerPresented = false
 
     var body: some View {
         NavigationStack {
@@ -37,24 +36,6 @@ struct HomeView: View {
             .sheet(isPresented: $appState.isEditorPresented) {
                 EditorView()
                     .environmentObject(appState)
-            }
-            // Real device: .fileImporter works correctly on iOS 26
-            .fileImporter(
-                isPresented: $isPickerPresented,
-                allowedContentTypes: [
-                    UTType(filenameExtension: "md") ?? .plainText,
-                    UTType(filenameExtension: "markdown") ?? .plainText
-                ],
-                allowsMultipleSelection: false
-            ) { result in
-                switch result {
-                case .success(let urls):
-                    guard let url = urls.first else { return }
-                    print("HomeView: fileImporter selected \(url.lastPathComponent)")
-                    appState.open(url: url)
-                case .failure(let error):
-                    appState.openError = FileOperationError.from(error)
-                }
             }
         }
     }
@@ -133,25 +114,58 @@ struct HomeView: View {
         // .fileImporter callback never fires on iOS 26 simulator.
         // UIDocumentPickerViewController presented from window root VC
         // at least opens the picker; try deprecated init for a different code path.
-        DocumentPickerPresenter.present { url in
+        DocumentPickerPresenter.presentLegacy { url in
             print("HomeView: simulator picker selected \(url.lastPathComponent)")
             appState.open(url: url)
         }
         #else
-        isPickerPresented = true
+        // Present UIDocumentPickerViewController directly via UIKit.
+        // Avoids SwiftUI sheet-stacking conflicts (e.g. tapping "Open Other File"
+        // right after the editor sheet dismisses) and starts at the Files app root
+        // rather than the app's sandbox folder.
+        DocumentPickerPresenter.present { url in
+            print("HomeView: picker selected \(url.lastPathComponent)")
+            appState.open(url: url)
+        }
         #endif
     }
 }
 
-// MARK: - Simulator picker (iOS 26 workaround)
+// MARK: - UIKit document picker presenter
 
-/// Presents UIDocumentPickerViewController from the window root VC using the
-/// deprecated string-based initializer — different internal code path from
-/// init(forOpeningContentTypes:), which may behave differently on iOS 26 simulator.
+/// Presents UIDocumentPickerViewController directly from the key window's top
+/// view controller, bypassing SwiftUI's sheet stack. This avoids a race condition
+/// where SwiftUI won't present a new sheet while a previous sheet is still
+/// mid-dismiss. It also lets the system start at the Files app root rather than
+/// the app's sandbox folder.
 enum DocumentPickerPresenter {
     private static var activeCoordinator: Coordinator?
 
+    /// Real device: modern UTType-based initializer, starts at Files app root.
     static func present(onPick: @escaping (URL) -> Void) {
+        guard let presenter = topViewController() else {
+            print("DocumentPickerPresenter: no presenter found")
+            return
+        }
+        let coordinator = Coordinator(onPick: onPick)
+        activeCoordinator = coordinator
+
+        let types: [UTType] = [
+            UTType(filenameExtension: "md") ?? .plainText,
+            UTType(filenameExtension: "markdown") ?? .plainText
+        ]
+        let picker = UIDocumentPickerViewController(forOpeningContentTypes: types)
+        picker.delegate = coordinator
+        picker.allowsMultipleSelection = false
+        picker.shouldShowFileExtensions = true
+        print("DocumentPickerPresenter: presenting from \(type(of: presenter))")
+        presenter.present(picker, animated: true)
+    }
+
+    /// Simulator (iOS 26 workaround): deprecated string-based initializer uses a
+    /// different internal code path that at least opens the picker, since the
+    /// modern init's callback never fires on the iOS 26 simulator.
+    static func presentLegacy(onPick: @escaping (URL) -> Void) {
         guard let presenter = topViewController() else {
             print("DocumentPickerPresenter: no presenter found")
             return
