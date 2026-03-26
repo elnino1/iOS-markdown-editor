@@ -50,6 +50,8 @@ class AppState: ObservableObject {
     @Published var largeFileWarning: Bool = false         // true when opened file > 500 KB
     @Published var encodingFallbackWarning: Bool = false  // true when latin1 fallback was used
 
+    let recentFiles = RecentFilesStore()
+
     // Retain the security-scoped URL so we can stop access when the document closes
     private var securityScopedURL: URL? = nil
 
@@ -90,6 +92,8 @@ class AppState: ObservableObject {
                     self.largeFileWarning = byteCount > 512_000
                     // Check encoding fallback
                     self.encodingFallbackWarning = doc.usedEncodingFallback
+                    // Record in recent files
+                    self.recentFiles.add(url: url)
                 } else {
                     // Open failed — release security-scoped resource, surface error to user
                     self.securityScopedURL?.stopAccessingSecurityScopedResource()

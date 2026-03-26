@@ -12,15 +12,25 @@
 		A1000003 /* MarkdownDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000013 /* MarkdownDocument.swift */; };
 		A1000004 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000014 /* AppState.swift */; };
 		A1000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000015 /* Assets.xcassets */; };
-		A1000006 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A1000016 /* Info.plist */; };
 		A1000007 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000017 /* HomeView.swift */; };
 		A1000008 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000018 /* EditorView.swift */; };
 		A1000009 /* ThemeColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000019 /* ThemeColors.swift */; };
 		A100000A /* HighlightingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001A /* HighlightingService.swift */; };
 		A100000B /* MarkdownTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001B /* MarkdownTextEditor.swift */; };
+		A100000C /* RecentFilesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001C /* RecentFilesStore.swift */; };
 		A2000001 /* MarkdownHighlighterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000011 /* MarkdownHighlighterTests.swift */; };
 		A2000002 /* UnsavedChangesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000012 /* UnsavedChangesTests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A2000042 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A1000060 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A1000040;
+			remoteInfo = MarkdownEditor;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		A1000010 /* MarkdownEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarkdownEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -35,6 +45,7 @@
 		A1000019 /* ThemeColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColors.swift; sourceTree = "<group>"; };
 		A100001A /* HighlightingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightingService.swift; sourceTree = "<group>"; };
 		A100001B /* MarkdownTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownTextEditor.swift; sourceTree = "<group>"; };
+		A100001C /* RecentFilesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentFilesStore.swift; sourceTree = "<group>"; };
 		A2000010 /* MarkdownEditorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarkdownEditorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2000011 /* MarkdownHighlighterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownHighlighterTests.swift; sourceTree = "<group>"; };
 		A2000012 /* UnsavedChangesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsavedChangesTests.swift; sourceTree = "<group>"; };
@@ -67,15 +78,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A2000031 /* MarkdownEditorTests */ = {
-			isa = PBXGroup;
-			children = (
-				A2000011 /* MarkdownHighlighterTests.swift */,
-				A2000012 /* UnsavedChangesTests.swift */,
-			);
-			path = MarkdownEditorTests;
-			sourceTree = "<group>";
-		};
 		A1000031 /* MarkdownEditor */ = {
 			isa = PBXGroup;
 			children = (
@@ -88,19 +90,29 @@
 				A1000019 /* ThemeColors.swift */,
 				A100001A /* HighlightingService.swift */,
 				A100001B /* MarkdownTextEditor.swift */,
+				A100001C /* RecentFilesStore.swift */,
 				A1000015 /* Assets.xcassets */,
 				A1000016 /* Info.plist */,
 			);
 			path = MarkdownEditor;
 			sourceTree = "<group>";
 		};
-		A1000032 /* root */ = {
+		A1000032 = {
 			isa = PBXGroup;
 			children = (
 				A1000031 /* MarkdownEditor */,
 				A2000031 /* MarkdownEditorTests */,
 				A1000030 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		A2000031 /* MarkdownEditorTests */ = {
+			isa = PBXGroup;
+			children = (
+				A2000011 /* MarkdownHighlighterTests.swift */,
+				A2000012 /* UnsavedChangesTests.swift */,
+			);
+			path = MarkdownEditorTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,31 +154,13 @@
 		};
 /* End PBXNativeTarget section */
 
-/* Begin PBXContainerItemProxy section */
-		A2000042 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A1000060 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A1000040;
-			remoteInfo = MarkdownEditor;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXTargetDependency section */
-		A2000043 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A1000040 /* MarkdownEditor */;
-			targetProxy = A2000042 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXProject section */
 		A1000060 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					A1000040 = {
 						CreatedOnToolsVersion = 15.0;
@@ -185,7 +179,7 @@
 				en,
 				Base,
 			);
-			mainGroup = A1000032 /* root */;
+			mainGroup = A1000032;
 			productRefGroup = A1000030 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -221,6 +215,7 @@
 				A1000009 /* ThemeColors.swift in Sources */,
 				A100000A /* HighlightingService.swift in Sources */,
 				A100000B /* MarkdownTextEditor.swift in Sources */,
+				A100000C /* RecentFilesStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,6 +229,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A2000043 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A1000040 /* MarkdownEditor */;
+			targetProxy = A2000042 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A1000070 /* Debug */ = {
@@ -257,9 +260,11 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_LOOPS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_CYCLES = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
@@ -293,6 +298,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -319,9 +325,11 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_LOOPS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_CYCLES = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
@@ -347,6 +355,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 			};
 			name = Release;
@@ -359,6 +368,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = NH37KHP3F6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = MarkdownEditor/Info.plist;
@@ -383,6 +393,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = NH37KHP3F6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = MarkdownEditor/Info.plist;
@@ -468,7 +479,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
 	};
 	rootObject = A1000060 /* Project object */;
 }
