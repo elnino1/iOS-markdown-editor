@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 02-00-PLAN.md
-last_updated: "2026-03-26T06:49:44Z"
+stopped_at: Paused at Task 2 checkpoint (human-verify) in 02-02-PLAN.md
+last_updated: "2026-03-26T07:35:03.108Z"
 progress:
   total_phases: 3
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 6
-  completed_plans: 4
+  completed_plans: 6
 ---
 
 # Project State: iOS Markdown Editor
@@ -119,6 +119,9 @@ From research/SUMMARY.md:
 | 1.5s auto-save delay | Within CONTEXT.md 1-2s discretion range; balances responsiveness and disk write frequency | 01-03 | ✓ Implemented |
 | Pure XCTFail stubs (no type references) | Ensures test target compiles before Wave 1 implementation exists; avoids "cannot find type in scope" errors | 02-00 | ✓ Implemented |
 | matchRanges helper separates regex from attribute mutation | Fixes Swift exclusive access: collect NSRange matches first, convert to AttributedString.Index, then apply in separate loop | 02-00 | ✓ Implemented |
+| Read UIDocument.hasUnsavedChanges directly in buildTitle() | No @Published isModified in AppState — avoids sync bugs (Pitfall 3 from research) | 02-02 | ✓ Implemented |
+| Remove SwiftUI modifiers from MarkdownTextEditor call site | .font/.background/.scrollContentBackground are no-ops on UIViewRepresentable; UITextView handles them internally | 02-02 | ✓ Implemented |
+| Test buildTitle as pure string logic in UnsavedChangesTests | UIDocument instantiation not needed; XCTest cannot host @EnvironmentObject views without a full SwiftUI app host | 02-02 | ✓ Implemented |
 
 ---
 
@@ -163,7 +166,7 @@ From research/SUMMARY.md:
 
 **Blockers:** None
 
-**Stopped at:** Completed 01-03-PLAN.md
+**Stopped at:** Paused at Task 2 checkpoint (human-verify) in 02-02-PLAN.md
 
 ### Plan 01-02 Execution (2026-03-25)
 
@@ -226,6 +229,27 @@ From research/SUMMARY.md:
 **Blockers:** None
 
 **Stopped at:** Completed 02-00-PLAN.md
+
+### Plan 02-02 Execution (2026-03-26) — Partial (paused at checkpoint)
+
+**Actions:**
+
+- Replaced `TextEditor` with `MarkdownTextEditor` in EditorView — live syntax highlighting now active
+- Added `buildTitle()` private method that appends " *" suffix when `document.hasUnsavedChanges` is true
+- Updated `.navigationTitle` to use `buildTitle()` result
+- Replaced XCTFail stubs in UnsavedChangesTests with 3 real XCTAssert-based tests — all pass
+- Full test suite (9 tests) passes: TEST SUCCEEDED
+- Build verified: BUILD SUCCEEDED
+
+**Decisions:**
+
+- Read UIDocument.hasUnsavedChanges directly — no @Published duplication in AppState
+- Remove SwiftUI modifiers from MarkdownTextEditor call site (no-ops on UIViewRepresentable)
+- Test buildTitle as pure string function (no UIDocument needed)
+
+**Blockers:** None
+
+**Stopped at:** Paused at Task 2 checkpoint (human-verify) in 02-02-PLAN.md
 
 ---
 

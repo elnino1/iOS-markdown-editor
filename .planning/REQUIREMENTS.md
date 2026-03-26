@@ -20,7 +20,7 @@
 
 ### Appearance
 
-- [ ] **APPR-01**: App supports light and dark mode
+- [x] **APPR-01**: App supports light and dark mode
 
 ## v2 Requirements
 
@@ -53,7 +53,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EDIT-02 | Phase 1 | Complete |
 | EDIT-03 | Phase 2 | Complete |
 | EDIT-04 | Phase 2 | Complete |
-| APPR-01 | Phase 2 | Pending |
+| APPR-01 | Phase 2 | Complete |
 
 **Coverage:**
 - v1 requirements: 7 total
