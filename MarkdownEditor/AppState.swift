@@ -31,12 +31,14 @@ class AppState: ObservableObject {
         // before UIDocument can read the file; stop after the document is closed.
         let accessed = url.startAccessingSecurityScopedResource()
         securityScopedURL = accessed ? url : nil
+        print("AppState: opening \(url.lastPathComponent) — securityScoped=\(accessed)")
 
         let doc = MarkdownDocument(fileURL: url)
         doc.open { [weak self] success in
             // UIDocument callbacks may arrive on any thread; dispatch to main actor.
             Task { @MainActor [weak self] in
                 guard let self else { return }
+                print("AppState: UIDocument.open completed — success=\(success)")
                 if success {
                     self.document = doc
                     self.isEditorPresented = true
@@ -44,7 +46,6 @@ class AppState: ObservableObject {
                     // Open failed — release the security-scoped resource immediately
                     self.securityScopedURL?.stopAccessingSecurityScopedResource()
                     self.securityScopedURL = nil
-                    print("AppState: UIDocument.open failed for \(url.lastPathComponent)")
                 }
             }
         }

@@ -1,74 +1,92 @@
 // MarkdownEditor/HighlightingService.swift
-import Foundation
-import SwiftUI
+import UIKit
 
 struct HighlightingService {
 
     /// Apply markdown syntax colors to plain text.
-    /// Returns AttributedString with colors applied to matched ranges.
-    /// Keeps MarkdownDocument.text as String (no serialization concern).
-    ///
-    /// Pattern application order: headings → bold → italic → code → links
-    /// (headings first so ## text is colored before bold/italic could interfere)
-    static func applyMarkdownColors(to text: String) -> AttributedString {
-        var result = AttributedString(text)
-        let nsText = text as NSString
-        let fullRange = NSRange(location: 0, length: nsText.length)
+    /// Returns NSAttributedString with UIKit attributes — safe to set directly on UITextView.
+    /// Pattern priority: headings → bold → italic → code → links.
+    static func applyMarkdownColors(
+        to text: String,
+        baseFont: UIFont = UIFont.preferredFont(forTextStyle: .body).withSize(16)
+    ) -> NSAttributedString {
+        let result = NSMutableAttributedString(string: text)
+        let fullRange = NSRange(location: 0, length: (text as NSString).length)
 
-        // 1. Headings: ^#+\s.+$ (anchors to line start)
-        let headingRanges = matchRanges(#"^(#+)\s(.+)$"#, options: [.anchorsMatchLines], in: text, fullRange: fullRange, result: result)
-        for range in headingRanges {
-            result[range].foregroundColor = .markdownHeading
-            result[range].font = .headline
-        }
+        // Base attributes: body font + adaptive text color for the entire string.
+        // These are applied first so syntax rules can override specific ranges.
+        result.addAttributes([
+            .font: baseFont,
+            .foregroundColor: UIColor.label
+        ], range: fullRange)
 
-        // 2. Bold: **text** (non-greedy)
-        let boldRanges = matchRanges(#"\*\*(.+?)\*\*"#, in: text, fullRange: fullRange, result: result)
-        for range in boldRanges {
-            result[range].foregroundColor = .markdownBold
-            result[range].font = .body.bold()
-        }
+        // 1. Headings: ^#+ \S
+        applyStyle(
+            pattern: #"^(#+)\s(.+)$"#,
+            options: [.anchorsMatchLines],
+            to: result, in: text, fullRange: fullRange,
+            attributes: [
+                .foregroundColor: ThemeColors.heading,
+                .font: UIFont.preferredFont(forTextStyle: .headline)
+            ]
+        )
 
-        // 3. Italic: *text* (non-greedy, must not match ** bold markers)
-        // Pattern uses negative lookbehind/lookahead to avoid matching ** bold markers
-        let italicRanges = matchRanges(#"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)"#, in: text, fullRange: fullRange, result: result)
-        for range in italicRanges {
-            result[range].foregroundColor = .markdownItalic
-            result[range].font = .body.italic()
-        }
+        // 2. Bold: **text**
+        applyStyle(
+            pattern: #"\*\*(.+?)\*\*"#,
+            to: result, in: text, fullRange: fullRange,
+            attributes: [
+                .foregroundColor: ThemeColors.bold,
+                .font: UIFont.boldSystemFont(ofSize: baseFont.pointSize)
+            ]
+        )
+
+        // 3. Italic: *text* (not matching ** bold markers)
+        applyStyle(
+            pattern: #"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)"#,
+            to: result, in: text, fullRange: fullRange,
+            attributes: [
+                .foregroundColor: ThemeColors.italic,
+                .font: UIFont.italicSystemFont(ofSize: baseFont.pointSize)
+            ]
+        )
 
         // 4. Inline code: `text`
-        let codeRanges = matchRanges(#"`(.+?)`"#, in: text, fullRange: fullRange, result: result)
-        for range in codeRanges {
-            result[range].foregroundColor = .markdownCode
-            result[range].font = .body.monospaced()
-        }
+        applyStyle(
+            pattern: #"`(.+?)`"#,
+            to: result, in: text, fullRange: fullRange,
+            attributes: [
+                .foregroundColor: ThemeColors.code,
+                .font: UIFont.monospacedSystemFont(ofSize: baseFont.pointSize, weight: .regular)
+            ]
+        )
 
         // 5. Links: [text](url)
-        let linkRanges = matchRanges(#"\[(.+?)\]\((.+?)\)"#, in: text, fullRange: fullRange, result: result)
-        for range in linkRanges {
-            result[range].foregroundColor = .markdownLink
-            result[range].underlineStyle = .single
-        }
+        applyStyle(
+            pattern: #"\[(.+?)\]\((.+?)\)"#,
+            to: result, in: text, fullRange: fullRange,
+            attributes: [
+                .foregroundColor: ThemeColors.link,
+                .underlineStyle: NSUnderlineStyle.single.rawValue
+            ]
+        )
 
         return result
     }
 
-    // MARK: - Private helper
+    // MARK: - Private
 
-    private static func matchRanges(
-        _ pattern: String,
+    private static func applyStyle(
+        pattern: String,
         options: NSRegularExpression.Options = [],
+        to result: NSMutableAttributedString,
         in text: String,
         fullRange: NSRange,
-        result: AttributedString
-    ) -> [Range<AttributedString.Index>] {
-        guard let regex = try? NSRegularExpression(pattern: pattern, options: options) else { return [] }
-        let matches = regex.matches(in: text, range: fullRange)
-        return matches.compactMap { match -> Range<AttributedString.Index>? in
-            guard let range = Range(match.range, in: text),
-                  let attrRange = Range(range, in: result) else { return nil }
-            return attrRange
+        attributes: [NSAttributedString.Key: Any]
+    ) {
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: options) else { return }
+        regex.matches(in: text, range: fullRange).forEach { match in
+            result.addAttributes(attributes, range: match.range)
         }
     }
 }
