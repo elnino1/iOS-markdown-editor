@@ -121,7 +121,12 @@ Plans:
 5. User can tap Bullet to prefix the current line with `- `, and tap Table to insert a 3-column x 2-row markdown table template at the cursor
 6. User can tap Undo and Redo in the toolbar to step through edit history including toolbar-applied formatting
 
-**Plans:** TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — XCTest stubs (Wave 0): failing test scaffolding for all 8 requirements
+- [ ] 04-02-PLAN.md — FormattingService + Coordinator methods: bold, italic, bullet, table, undo/redo logic
+- [ ] 04-03-PLAN.md — Toolbar UI: wire .toolbar(placement: .keyboard) into EditorView + human verification
 
 ---
 
@@ -132,7 +137,7 @@ Plans:
 | 1. Core | v1.0 | 3/3 | Complete | 2026-03-25 |
 | 2. Editor Experience | v1.0 | 3/3 | Complete | 2026-03-26 |
 | 3. Polish | v1.0 | 3/3 | Complete | 2026-03-26 |
-| 4. Formatting Toolbar | v1.1 | 0/? | Not started | - |
+| 4. Formatting Toolbar | v1.1 | 0/3 | Not started | - |
 
 ---
 
@@ -156,9 +161,15 @@ Phase 2: Editor Experience (coloring + appearance)
 Phase 3: Polish (hardening)
     ↓
 Phase 4: Formatting Toolbar (v1.1)
+  Wave 1: 04-01 (test stubs)
+    ↓
+  Wave 2: 04-02 (FormattingService + Coordinator)
+    ↓
+  Wave 3: 04-03 (toolbar UI + human verification)
 ```
 
 ---
 
 *Roadmap created: 2026-03-25*
 *Updated: 2026-03-26 — v1.1 milestone: Phase 4 Formatting Toolbar added (8 requirements)*
+*Updated: 2026-03-26 — Phase 4 planned: 3 plans across 3 waves*
