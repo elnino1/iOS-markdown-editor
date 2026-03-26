@@ -1,258 +1,283 @@
 # Project Research Summary
 
-**Project:** iOS Markdown Editor with Google Drive Integration
-**Domain:** iOS document editing app with cloud storage and dot-folder access
-**Researched:** 2026-03-25
-**Confidence:** MEDIUM (training data current to Feb 2025; recommend API/framework verification during Phase 1)
+**Project:** iOS Markdown Editor with Google Drive Integration (v1.0 completed through Phase 3 + v1.1 Formatting Toolbar enhancement)
+**Domain:** iOS document editing app with cloud storage integration
+**Researched:** 2026-03-26 (v1.1 toolbar update to prior 2026-03-25 v1.0 research)
+**Confidence:** MEDIUM-HIGH (v1.0 core stack validated across 3 completed phases; v1.1 toolbar uses stable iOS APIs with clear implementation patterns)
 
 ## Executive Summary
 
-This is a focused iOS markdown editor that differentiates itself by enabling access to dot-prefixed folders in Google Drive (`.planning`, `.claude`, `.git`, etc.) — a feature explicitly blocked by standard iOS file pickers. The recommended approach combines SwiftUI for the frontend with direct Google Drive REST API integration via OAuth 2.0, avoiding the convenience but feature-limited `UIDocumentPickerViewController`.
+The iOS Markdown Editor has successfully completed its v1.0 MVP (Phases 1-3: Auth → Browse with dot folders → Raw text editing) and is transitioning to v1.1 (Phase 4: Formatting toolbar). The project differentiates itself by enabling access to hidden dot folders in Google Drive—a use case that standard iOS file pickers deliberately exclude. The core architecture (SwiftUI frontend, UIDocument for file coordination, direct Google Drive REST API for dot folder access, Combine auto-save) is sound and battle-tested through Phase 3.
 
-Building this app requires careful attention to four critical areas: (1) OAuth token refresh and lifecycle management, (2) file conflict detection when concurrent edits occur, (3) explicit handling of dot-folder visibility in API queries, and (4) robust network error handling for save operations. The technology stack is mature and well-documented (Swift 5.10+, SwiftUI on iOS 16+, Google Drive REST API v3), but the integration complexity is moderate due to Google Drive's async APIs and the need for custom file browsing UI.
+The v1.1 formatting toolbar feature adds production complexity through text manipulation and undo/redo management, but the risk is well-characterized and avoidable with strict adherence to three implementation patterns: (1) all text changes via UITextInput protocol methods (insertText, replace), never direct textStorage modification; (2) undo registration BEFORE text modification using atomic grouping for multi-step operations; (3) NSRange calculations always using NSString (UTF-16), not Swift String.count, to prevent emoji corruption. The recommended approach uses SwiftUI's native `.toolbar(placement: .keyboard)` modifier (iOS 15+) rather than UIKit's legacy inputAccessoryView pattern, avoiding unnecessary complexity while leveraging the project's iOS 16+ minimum.
 
-The roadmap should sequence Foundation → Browse → Edit → Sync → Polish, with each phase building upon the previous and each addressing specific pitfalls identified in research. V1 is explicitly a raw text editor (no markdown preview, no offline sync, no multi-file tabs) to validate the core value proposition and user workflow before expanding scope.
+Implementation success hinges on three mechanics: cursor position preservation across insertions (save before, recalculate offsets, restore after), NSRange handling of multi-byte characters, and avoiding feedback loops between toolbar actions and syntax highlighting (mitigated by existing 300ms debounce). These are well-documented patterns with clear code examples in STACK.md and PITFALLS.md. The critical pitfalls (undo stack corruption, cursor jumping, attribute loss) are high-severity but preventable with discipline. Phase 4 requires comprehensive testing across ASCII, emoji, CJK text, and multi-line selections before closing.
 
 ## Key Findings
 
 ### Recommended Stack
 
-The technology stack emphasizes leveraging official Google SDKs and Apple frameworks to minimize dependencies and avoid reimplementing OAuth or file handling. Swift 5.10+ with SwiftUI (iOS 16+) is the standard for new iOS projects. Google Drive integration requires the official REST API v3 rather than `UIDocumentPickerViewController` to enable dot-folder browsing—a critical differentiator.
+The v1.0 core stack (validated through Phase 3 execution) remains the foundation. The v1.1 toolbar adds only SwiftUI and iOS standard library components—no new external dependencies.
 
-**Core technologies:**
-- **Swift 5.10+ / SwiftUI** — Modern, declarative UI framework with strong FileProvider integration; reduces boilerplate vs. UIKit
-- **Google Drive REST API v3 + GoogleSignIn SDK 7.0+** — Only way to access Google Drive directly with dot-folder support; UIDocumentPickerViewController only accesses iCloud Drive
-- **URLSession (built-in)** — Sufficient for REST API calls; Combine reactive patterns for async callbacks
-- **FileProvider framework** — Local caching for offline access; enables syncing changes back to Drive
-- **SwiftData (iOS 17+) or Core Data** — Store OAuth tokens securely in Keychain; persist auth state, file history, user preferences (NOT markdown content, which lives in Drive)
-- **UITextView (wrapped in SwiftUI)** — More performant than SwiftUI TextEditor for larger files; supports attributed strings for toolbar formatting. Acceptable to start with TextEditor if file sizes stay <100KB.
+**Core technologies (v1.0, validated):**
+- **Swift 5.10+** — Language with mature async/await patterns
+- **SwiftUI (iOS 16+)** — Declarative UI framework; clean state management; integrates seamlessly with UIViewRepresentable wrapping of UITextView
+- **UITextView (wrapped via UIViewRepresentable)** — Better performance than SwiftUI's TextEditor for large files; supports NSAttributedString for syntax highlighting; text insertion APIs integrate with UndoManager
+- **UIDocument** — iOS standard for file coordination; atomic read/write to original location; handles concurrent access
+- **Google Drive REST API v3** — Direct API access enables dot folder visibility; UIDocumentPickerViewController filters these out by default
+- **Combine** — Reactive patterns for file I/O callbacks and debounced auto-save (1.5s debounce in EditorView.scheduleSave)
+- **NSAttributedString + UITextView textStorage observer** — Markdown syntax highlighting with visual formatting
+
+**New for v1.1 (Toolbar):**
+- **SwiftUI `.toolbar` modifier (iOS 15+, recommended for iOS 16+)** — Native keyboard toolbar without UIKit bridging; automatically handles keyboard appearance/dismissal animations; cleaner than inputAccessoryView legacy approach
+- **UITextInput protocol methods** (insertText, replace) — Standard text insertion APIs that integrate with UndoManager; MUST be used instead of direct textStorage modification
+- **UndoManager (built-in)** — Tracks custom formatting operations if registered correctly (BEFORE text modification); atomic grouping via beginUndoGrouping/endUndoGrouping for multi-step operations
 
 **Version constraints:**
-- Minimum iOS 16.0 (SwiftUI TextEditor support)
-- Target iOS 17.0+ (SwiftData available; cleaner async/await patterns)
+- Minimum iOS 16.0 (project requirement; SwiftUI .toolbar fully supported)
 - Xcode 15.1+
+- No external dependencies required for toolbar feature
 
-**Deferred to v2+:**
-- Markdown parsers (cmark-swift, Down, SwiftMarkdown) — add for preview feature
-- Syntax highlighting — nice-to-have, deferred
-- Image/file embedding and rich media — scope expansion
+**What NOT to use:**
+- ~~inputAccessoryView~~ — Legacy UIKit approach; adds UIViewRepresentable bridging complexity; SwiftUI .toolbar is simpler for iOS 16+ projects
+- ~~Direct textStorage modification~~ — Bypasses UndoManager; breaks undo/redo; corrupts syntax highlighting state
+- ~~Embedding webviews for auth~~ — Apple App Review rejection risk; security vulnerability
+
+See STACK.md for detailed implementation patterns (bold/italic wrapping with marker insertion, bullet list prefixing, table templates, undo/redo registration order) and anti-patterns with code examples.
 
 ### Expected Features
 
-**Must-have (table stakes — no launch without these):**
-- Google Drive OAuth2 authentication with token refresh
-- Browse Drive folder hierarchy including dot-prefixed folders (`.claude`, `.planning`, etc.) — this is THE differentiator
+**v1.0 Features (Phases 1-3, completed):**
+- Google Drive OAuth2 authentication
+- Browse Drive folder hierarchy with **dot folder visibility** (differentiator)
 - Open and edit markdown files as raw text
-- Formatting toolbar: bold, italic, headers (h1-h3), bullets, numbered lists
-- Save edits back to Drive atomically with conflict detection (ETag-based)
-- File metadata display (path, size, last modified)
-- Sync status indicator (saved / syncing / error states)
+- File metadata display
+- Syntax highlighting (NSAttributedString-based)
+- Auto-save via Combine debounce
 
-**Should-have (competitive, v1 if time permits):**
-- Keyboard shortcuts (Command+B, Command+Z, Command+I) — increases perceived polish
-- Find/Replace within file — useful for large documents
-- Syntax highlighting — markdown color coding improves readability
-- Undo/redo beyond system level — refined editing experience
+**v1.1 Features (Phase 4, in planning):**
+- **Formatting toolbar:** Bold, Italic, H1-H3 headers, Bullet lists, Numbered lists, Table insertion
+- Undo/Redo buttons integrated with system undo stack
+- Unsaved changes indicator updates on toolbar action
+- Selection preservation across formatting operations
+
+**Nice-to-have (if Phase 4 time permits, v1.1 polish):**
+- Keyboard shortcuts (Command+B, Command+I, Command+Z, Command+F)
+- Search/Find within file
+- Undo/Redo button state management (disabled when stack empty)
 
 **Explicitly defer to v2+:**
-- Markdown preview / rendered output — explicitly out of v1 scope per PROJECT.md
-- Local file caching for offline editing — requires complex sync and conflict resolution
-- Multiple file tabs — single-file workflow for v1
-- Real-time collaboration / multi-user editing — out of scope
-- Custom themes or colors beyond system light/dark mode
-- Note-taking features (notebooks, tags, search across files) — this is an editor, not a notes app
+- Markdown preview / rendered output
+- Local file caching for offline editing
+- Multiple file tabs
+- Real-time collaboration
+- Custom themes beyond system light/dark
+- Note-taking features (this is an editor, not a notes app)
 
-**Google Drive-specific MVP requirements:**
-- Dot folder visibility (non-negotiable differentiator)
-- Full path breadcrumb for deep folder navigation
-- Refresh folder listing (Drive changes outside app)
-- File picker fallback (UIDocumentPickerViewController as emergency UX)
+See FEATURES.md for full feature landscape, MVP recommendation, and Google Drive-specific requirements.
 
 ### Architecture Approach
 
-The recommended architecture uses a component-based approach with clear separation between UI (Views), business logic (ViewModels), and external integrations (Managers). The data flow follows a producer-consumer pattern: AuthManager produces valid tokens → DriveManager consumes tokens to fetch file metadata → FileSystemCoordinator maps cloud files to local paths → TextEditorViewController displays and edits → SyncManager saves changes back to Drive with conflict resolution.
+v1.0 established clean separation: **AuthManager** (OAuth token lifecycle) → **DriveManager** (Google Drive API) → **DriveFileCache** (metadata caching) → **BrowseViewController** (folder tree UI) → **FileSystemCoordinator** (ID-to-path mapping) → **TextEditorViewController** (text editing) → **EditorState** (ViewModel mediating file context) → **SyncManager** (uploads with conflict detection).
 
-**Major components and responsibilities:**
-1. **AuthManager** — Google OAuth 2.0 lifecycle: token refresh, expiration handling, Keychain storage
-2. **DriveManager** — Google Drive REST API calls for listing files/folders, fetching metadata; implements exponential backoff retry logic
-3. **DriveFileCache** — In-memory metadata cache to minimize Drive API quota consumption; stores folder listings and file metadata (not content)
-4. **BrowseViewController** — Hierarchical folder tree UI; allows drill-down to dot folders with no MIME type filtering
-5. **FileSystemCoordinator** — Maps Drive file IDs to local temp file paths; manages cached file content on disk
-6. **TextEditorViewController** — Raw markdown text editing, toolbar formatting controls
-7. **EditorState (ViewModel)** — Current file context: file ID, name, version, unsaved changes flag; acts as mediator across views
-8. **SyncManager** — Drive file uploads with ETag-based conflict detection; implements resumable uploads for reliability
-9. **ConflictResolver** — Presents user choice when file changed externally: "Overwrite Server" | "Discard Changes" | "Save as New"
+v1.1 extends this by adding formatting actions to the existing **TextEditorCoordinator** (already in the UIViewRepresentable pattern). The Coordinator manages the wrapped UITextView and already handles text delegate callbacks; formatting methods are a natural extension. SwiftUI toolbar (outside the UIViewRepresentable) calls these Coordinator methods, routing actions back to UITextView.
 
-**Critical patterns:**
-- All network calls implement exponential backoff retry with token refresh handling and graceful cache degradation
-- EditorState coordinates between browse and edit views; holds authoritative file context
-- Cache invalidation triggered post-upload and on explicit user refresh action
-- File content stored on disk (not in memory) even for small files — keeps memory footprint predictable
-- Authentication uses system browser (`ASWebAuthenticationSession`), never embedded webview (Apple AppReview requirement)
+**Major components:**
+1. **TextEditorCoordinator** (enhanced for v1.1) — Implements UITextViewDelegate; hosts text manipulation methods (applyBold, applyItalic, applyHeader, applyBullet, insertTable); manages selection preservation and undo registration
+2. **EditorState (ViewModel)** — Tracks current file context; coordinate sync between UI and file state; routing for undo/redo updates to updateChangeCount
+3. **HighlightingService** — Syntax highlighting via NSAttributedString observer; runs debounced (300ms) to avoid re-running during rapid toolbar actions; preserves selection during re-highlighting
+
+**Key patterns for v1.1:**
+- **Text insertion via UITextInput:** All formatting operations use `insertText()` or `replace()`, never direct textStorage mutation
+- **Undo atomicity:** Multi-step operations (bold wrapping = two insertions) grouped via beginUndoGrouping/endUndoGrouping so they undo as one step
+- **Selection preservation:** Save selectedRange before modification; recalculate positions accounting for inserted text; restore selectedRange after
+- **NSRange vs NSString:** All position calculations use NSString (UTF-16 aware), not Swift String.count (grapheme-cluster aware) to handle emoji correctly
+- **Highlighting debounce:** Toolbar actions don't immediately trigger highlighting re-run; existing 300ms debounce in textViewDidChange prevents visual flicker
+
+See ARCHITECTURE.md for detailed data flow diagrams, auth flow, conflict resolution, and component interaction patterns.
 
 ### Critical Pitfalls
 
-1. **OAuth Token Expiration & Refresh Loop** — Users can't save mid-session if token expires without proper refresh handling. Prevent by: storing refresh tokens in Keychain, catching 401 responses and auto-refreshing, using GIDSignIn framework (handles automatically), testing manual token expiration scenarios. Must be correct before any Drive integration ships.
+**Toolbar implementation introduces five high-severity pitfalls that can corrupt document state or destroy user trust:**
 
-2. **File Conflict on Save (Concurrent Edits)** — Editing file in Drive web while app is open → app saves without checking current version → external edits silently lost with no recovery. Prevent by: implementing ETag-based conflict detection, showing user choice dialog ("Overwrite Server" | "Discard Changes" | "Save as New"), logging all save operations with timestamps. Essential before save feature ships.
+1. **Undo Stack Invalidation via Direct TextStorage Modification** (CRITICAL)
+   - **The risk:** Toolbar code modifies `textView.textStorage` directly (e.g., `addAttribute()`, `replaceCharacters()`) instead of using UITextInput methods. Result: undo/redo becomes inconsistent. User presses Undo, text reverts but formatting doesn't, corrupting document state. Syntax highlighting observer may not fire correctly.
+   - **How to avoid:** Use `UITextInput.insertText()` or `replace()` for ALL text changes. Register undo BEFORE modifying text using `undoManager.registerUndo(withTarget:handler:)`. For multi-step operations (bold wrapping), use atomic grouping: `beginUndoGrouping()` → insert → insert → `endUndoGrouping()` so all steps undo as one.
+   - **Detection:** User applies bold formatting, presses Undo, text reverts but bold markers don't. Or undo stack grows incorrectly (toolbar actions appearing as multiple steps instead of one).
 
-3. **Dot Folder Access Denied** — Standard API queries filter out dot folders; UIDocumentPickerViewController won't show them → core value proposition completely broken. Prevent by: using custom Drive API browser (mandatory), not applying default "hide dotfiles" filters, explicitly testing with `.planning` and `.claude` folders in test Drive, documenting that system picker cannot access dot folders.
+2. **Cursor Position Loss After NSRange-based Text Insertion** (CRITICAL)
+   - **The risk:** Toolbar inserts opening marker at position 10, which shifts all subsequent text. Then tries to insert closing marker at position 10 + selection length, but the offset is wrong because the first insertion already shifted everything. Result: cursor jumps to end of document or selection is lost.
+   - **How to avoid:** Save `selectedRange` BEFORE any modification. For multi-step insertion (bold = `**text**`), calculate both positions based on original range, then use atomic undo grouping to batch them. After all insertions complete, recalculate and restore selectedRange to the new position inside the markers.
+   - **Detection:** After toolbar action, cursor jumps to end of text. Rapid toolbar clicks fail (second action inserts in wrong location or doesn't appear).
 
-4. **Large File / Network Timeout During Save** — Saving >100KB markdown on slow network times out mid-stream with no resume capability → user loses unsaved edits. Prevent by: implementing Google Drive resumable uploads, setting 30+ second timeouts with exponential backoff, showing upload progress indicator, testing network slow-down and WiFi-to-cellular switches during save.
+3. **Attributed String Highlighting Interfering with Toolbar Formatting** (HIGH)
+   - **The risk:** Toolbar inserts `**bold**` markers. Syntax highlighting service re-runs, re-scanning entire document, and reassigns `attributedText`. This can reset `selectedRange` to 0, lose transient formatting, or create visual flicker.
+   - **How to avoid:** Highlighting is already debounced (300ms delay) in current code (highlightTimer in MarkdownTextEditor.Coordinator). Selection is already preserved during re-highlighting. For toolbar actions, highlighting won't immediately re-run because textViewDidChange debounce timer is cancelled and restarted. This design is already in place and should not be changed.
+   - **Detection:** Formatting appears briefly, then disappears as highlighting re-runs; visual flicker immediately after toolbar action.
 
-5. **State Management After App Backgrounding** — App returns from background with stale file state; external change made while backgrounded goes unnoticed → save overwrites external edits silently. Prevent by: implementing `sceneWillEnterForeground` handler to refresh file metadata, checking ETag/modification time when returning from background, alerting user if external change detected before allowing further edits.
+4. **NSRange Off-by-One Errors with Emoji and Multi-Byte Characters** (MEDIUM)
+   - **The risk:** Text contains emoji 👨‍👩‍👧 (8 UTF-16 units but Swift String.count = 1). NSRange uses UTF-16 positions. Insertion happens in middle of emoji, breaking it visually into separate pieces. Or selectedRange includes part of emoji, causing corruption.
+   - **How to avoid:** Always use NSString (UTF-16 aware) for NSRange calculations. Never use Swift String.count for position math. Test extensively with multi-byte emoji: family emoji with ZWJ (👨‍👩‍👧), flag combinations (🏳️‍🌈), skin-tone modifiers (👩🏾‍💼, ☝🏽).
+   - **Detection:** User inserts text near emoji, emoji breaks into separate pieces. Works fine with ASCII, breaks with emoji or CJK text.
+
+5. **Incorrect Line Range Calculation for Bullet/Table Insertion** (MEDIUM)
+   - **The risk:** Developer uses `String.split(separator: "\n")` which doesn't map to NSRange positions. Or calculates line end incorrectly. Result: bullet inserted on wrong line (off by 1), or multi-line selection only affects first line.
+   - **How to avoid:** Use `NSString.lineRange(for:)` to find line boundaries from cursor position. For multi-line selection, find first and last lines, then process all lines in range. Preserve newline style (LF vs CRLF).
+   - **Detection:** Bullet appears on wrong line after toolbar action. Multi-line selection (select 3 lines, apply bullet) only formats one line. Text looks corrupted after bullet/table insertion.
+
+**Additional moderate/minor pitfalls** (see PITFALLS.md for details):
+- textViewDidChange called 2-3 times per keystroke on iOS 17 with CJK keyboards (mitigated by 300ms debounce; recommend testing)
+- selectedTextRange vs selectedRange confusion (stick with selectedRange throughout for consistency)
+- Unsaved indicator lags (ensure toolbar actions call document.updateChangeCount(.done) immediately)
+- Toolbar disappears after keyboard dismissal or rotation (edge case with inputAccessoryView; not relevant for SwiftUI .toolbar approach)
+
+See PITFALLS.md for full implementation patterns with code examples, detection strategies, and comprehensive testing checklist.
 
 ## Implications for Roadmap
 
-Based on research, the recommended phase structure follows dependency order: authentication must work before browsing, browsing before opening, opening before editing, editing before saving. This progression validates the core workflow at each step and isolates pitfalls to specific phases for focused mitigation.
+The project has completed Phases 1-3 (Auth, Browse, Edit with syntax highlighting). Phase 4 (Formatting Toolbar) is the recommended next phase. The phase structure remains unchanged from 2026-03-25 research; this update refines Phase 4 implementation details.
 
-### Phase 1: Foundation (Auth + Drive Connection)
-**Rationale:** Google Drive integration and OAuth2 are prerequisites for all other features. Core pitfall (token refresh) must be correct before touching any file operations.
+### Phase 1-3: Foundation, Browse, Edit (✓ COMPLETED)
+
+Phases 1-3 validated:
+- OAuth token refresh and Drive API integration
+- Dot folder visibility working correctly via API (critical differentiator)
+- UITextView with NSAttributedString highlighting performant for typical markdown files
+- Combine-based auto-save debounce stable
+
+No changes to completed phases.
+
+### Phase 4: Formatting Toolbar (v1.1 — NEXT)
+
+**Rationale:** Phase 3 delivers MVP raw text editor. Phase 4 adds table-stakes feature: formatting toolbar so users can insert markdown syntax via buttons instead of typing markers. Industry standard for markdown editors. Does not block v1.0 launch (can ship with raw text only) but essential for v1.1 competitiveness.
+
 **Delivers:**
-- Working Google Sign-In with OAuth 2.0 PKCE flow
-- AuthManager with token lifecycle management and Keychain storage
-- DriveManager with basic files.list capability
-- Test auth flow end-to-end: sign in, token expiration, refresh, invalid token recovery
-**Avoids:**
-- Pitfall 1 (Token Expiration) — implement refresh logic and token storage correctly from start
-- Pitfall 3 (Dot Folder Access) — verify Drive API returns dot folders with minimal filters
-- Pitfall 6 (Insufficient OAuth Scope) — request `drive` scope for full Drive access
+- SwiftUI toolbar with buttons: Bold, Italic, H1, H2, H3, Bullet, Numbered list, Table
+- Each button calls TextEditorCoordinator method (applyBold, applyItalic, etc.)
+- All text insertions use UITextInput methods; undo registration enforced
+- Selection preservation across all formatting operations
+- Unsaved changes indicator (`*` in title) updates immediately on toolbar action
+- Undo/Redo buttons in toolbar that trigger system undo stack
+- Comprehensive testing: ASCII + emoji + CJK; single-line + multi-line selections; large files (>100KB); rapid button clicks
 
-**Research flags:** Verify current GIDSignIn SDK behavior with Xcode 16 docs; confirm PKCE flow implementation; test dot-folder visibility in Drive API v3 with current credentials.
+**Stack elements used:**
+- SwiftUI `.toolbar` modifier with `ToolbarItemGroup(placement: .keyboard)`
+- UITextInput protocol (insertText, replace methods)
+- UndoManager with beginUndoGrouping/endUndoGrouping
+- NSString for range calculations
 
-### Phase 2: Browse (Display Drive Hierarchy)
-**Rationale:** Foundation auth enables building the custom file browser that differentiates this app. Folder browsing must work before opening files.
-**Delivers:**
-- BrowseViewController with hierarchical folder tree
-- DriveFileCache for metadata (minimal API quota usage)
-- FileSystemCoordinator mapping Drive IDs to local paths
-- Full dot-folder support with no filters
-- Breadcrumb navigation and refresh button
-- End-to-end: browse from root, drill into `.planning` folder, see files inside
-**Avoids:**
-- Pitfall 3 (Dot Folder Access) — custom browser mandatory; don't use UIDocumentPickerViewController
-- Pitfall 8 (Infinite Folder Recursion) — track visited folder IDs, limit depth to ~50 levels
-**Features delivered:** Browse cloud storage hierarchy, dot folder browsing (differentiator)
+**Implements:**
+- TextEditorCoordinator enhanced with formatting methods
+- Toolbar placement in EditorView (outside UIViewRepresentable)
+- Immediate updateChangeCount call on toolbar action
 
-**Research flags:** Verify exact Drive API query parameters for listing (confirm `trashed=false` includes dot folders); test with real shared Drive structures for folder loops.
+**Avoids critical pitfalls:**
+- No direct textStorage modification
+- Undo registered BEFORE text changes
+- Selection saved/restored with offset recalculation
+- NSRange calculations use NSString throughout
+- Line ranges found via NSString.lineRange()
+- No immediate highlighting re-run on toolbar action (existing debounce sufficient)
 
-### Phase 3: Edit (Open + Modify)
-**Rationale:** With auth and browsing working, implement the core editing experience. Raw text editing is the minimal surface; toolbar follows if time permits.
-**Delivers:**
-- TextEditorViewController with UITextView or SwiftUI TextEditor
-- EditorState ViewModel coordinating file context across views
-- Text editing with cursor control and system undo/redo
-- Formatting toolbar: bold, italic, headers (h1-h3), bullets, numbered lists — all insert markdown syntax
-- Unsaved changes indicator
-- File metadata display (path, size, modified time)
-- End-to-end: open file from Phase 2 browser, edit text, see "unsaved changes" indicator
-**Avoids:**
-- Pitfall 9 (Markdown Formatting Corruption) — careful selection handling with UITextView APIs, test with special characters
-- Pitfall 7 (Text Encoding Issues) — detect encoding on load (attempt UTF-8 first), always save UTF-8
-**Features delivered:** Open markdown files, raw text editing, basic text formatting toolbar
+**Implementation approach:**
+1. Add `.toolbar` modifier to EditorView with ToolbarItemGroup(placement: .keyboard)
+2. Create formatting button targets: formatBold(), formatItalic(), formatHeader(level:), formatBullet(), formatNumberedList(), insertTable()
+3. Each method: save selectedRange → register undo → insert via UITextInput → recalculate/restore selectedRange
+4. For multi-step operations (bold wrapping), use atomic grouping
+5. Call document.updateChangeCount(.done) immediately after each operation
+6. Test extensively: emoji edge case (👨‍👩‍👧, 🏳️‍🌈, skin-tone variants); multi-line selection (select 3 lines, apply bullet); large file (>100KB, verify highlighting debounce works); rapid clicks (10+ toolbar button taps in 1 second)
 
-**Research flags:** Validate TextEditor performance on 1MB+ files; if slow, fallback plan to switch to UITextView wrapper is documented in STACK.md. Test toolbar selection handling thoroughly with special chars.
+**Estimated duration:** 2-3 weeks (implementation + testing)
 
-### Phase 4: Sync (Save Back to Drive)
-**Rationale:** File editing is worthless without saving. Conflict detection is essential for multi-access scenarios.
-**Delivers:**
-- SyncManager with Drive files.update API
-- ETag-based conflict detection
-- ConflictResolver UI: "Overwrite Server" | "Discard Changes" | "Save as New"
-- Exponential backoff retry logic (quota exhaustion, transient failures)
-- Resumable upload for large files
-- Sync status indicator (saved / syncing / error states)
-- End-to-end: edit file, tap Save, see confirmation; verify file updated in Drive web
-**Avoids:**
-- Pitfall 2 (File Conflict on Save) — implement ETag checking before every save; must support user choice for conflicts
-- Pitfall 4 (Large File / Network Timeout) — resumable uploads, 30+ second timeout, progress indicator
-- Pitfall 5 (State Management After Backgrounding) — refresh metadata on foreground, check ETag before allowing further edits
-- Pitfall 10 (No Offline Support, Confusing UX) — disable save button when offline; show network indicator
-**Features delivered:** Save to cloud, sync status indicator
+**Research flags for Phase 4 execution:**
+- Emoji text insertion edge cases — verify cursor position and syntax highlighting preserve correctly
+- Multi-line selection bullet/table insertion — confirm all lines get formatted, not just first
+- Large file performance — profile highlighting cost with >100KB file; verify debounce prevents lag
+- iOS 17 CJK input method behavior — test on real iOS 17 device if possible (double-delegate-call risk)
+- Real device testing — emoji handling may differ from simulator
 
-**Research flags:** Confirm ETag availability and format in Google Drive API response; validate resumable upload implementation with slow network simulation; test background session behavior during save.
+### Phase 5: Polish (v1.1 Completion) — CONDITIONAL
 
-### Phase 5: Polish (Edge Cases & Refinement)
-**Rationale:** Earlier phases deliver core workflow; this phase addresses UX edge cases and reliability.
-**Delivers:**
-- Network error handling and offline indicator
-- File size limits with warnings (e.g., >5MB warning)
-- Character encoding detection (non-UTF-8 file support)
-- Cache invalidation on app foreground
-- Keyboard shortcuts (Command+B, Command+Z, Command+I) if time permits
-- Find/Replace within file if time permits
-- Syntax highlighting if time permits
-- Thorough error messages (not generic "Error 403")
-- UX clarity: "This is a raw markdown editor. Formatting appears as markdown syntax."
-**Avoids:**
-- Pitfall 11 (Poor Error Messages) — specific messages like "Permission denied: you don't have write access" vs. generic errors
-- Pitfall 12 (Toolbar UX Confusion) — clear UI communication that syntax is visible
-**Features delivered:** Keyboard shortcuts (optional), find/replace (optional), syntax highlighting (optional), improved error handling
+**Rationale:** After Phase 4 toolbar ships, gather early user feedback. Phase 5 addresses practical improvements if data supports them.
 
-**Research flags:** Phase 5 is polish; research flags from Phases 1-4 should be resolved by here. Validate Network.framework availability for target iOS version.
+**Potential additions (based on user feedback):**
+- Keyboard shortcuts (Command+B, Command+I, Command+Z, Command+F) — easy addition; high power-user value
+- Search/Find within file — moderate complexity; high utility for large documents
+- Undo/Redo button state management (disable when stack empty) — UX refinement
+- Syntax highlighting improvements (currently basic Markdown pattern matching)
+
+**Do NOT add in Phase 5:**
+- Preview features (defer to v2)
+- Multiple file tabs (defer to v2)
+- Offline sync (defer to v2)
+- Custom themes (defer to v2)
 
 ### Phase Ordering Rationale
 
-- **Auth before Browse:** Drive API calls require valid tokens; token refresh logic must be proven before adding network calls
-- **Browse before Edit:** Users can't edit files they can't access; browser validates Drive API integration end-to-end
-- **Edit before Sync:** Editing without save is pointless, but saves without editing is impossible; editor must exist first
-- **Sync before Polish:** Core workflow (auth → browse → edit → save) must ship before optimization and UX refinement
-- **This order avoids pitfalls:** Token refresh in Phase 1 prevents Pitfall 1 from affecting Phases 2-4; conflict detection in Phase 4 prevents Pitfall 2; dot-folder browser in Phase 2 prevents Pitfall 3; resumable uploads in Phase 4 prevent Pitfall 4; foreground refresh in Phase 4-5 prevents Pitfall 5
+- **Phases 1-3 (completed):** Critical path: Auth → Browse → Edit. Each validates prior phase. Proves dot folder access works; proves UITextView editor is performant.
+- **Phase 4 (toolbar):** Natural progression; users expect formatting in markdown editor. Blocks v1.1 release but not v1.0 MVP. Depends entirely on Phase 3 (UITextView already integrated; just adds button targets).
+- **Phase 5 (polish):** Only after Phase 4 ships and early users validate workflow. Roadmap adjusts based on feedback.
 
 ### Research Flags
 
-**Phases likely needing deeper research during planning:**
-- **Phase 1 (Foundation):** Google Drive API OAuth2 and token refresh — current SDK behavior with Xcode 16 should be verified; PKCE flow implementation may have updated best practices
-- **Phase 2 (Browse):** Google Drive API folder listing — confirm exact query parameters for dot-folder inclusion and pagination; test with shared Drives for recursion issues
-- **Phase 4 (Sync):** Google Drive ETag format and resumable upload reliability — official API documentation should be reviewed; rate limits and quota behavior should be tested
+**Phases needing deeper research during Phase 4 execution:**
+- **Emoji edge cases:** Recommend spike testing 👨‍👩‍👧, 🏳️‍🌈, skin-tone modifiers before full implementation. Unit tests should cover these.
+- **Multi-line bullet formatting:** Recommend unit tests confirming all selected lines get bullet prefix, not just first.
+- **Large file performance:** Recommend profiling with >100KB file to confirm highlighting debounce is sufficient.
+- **iOS 17 CJK keyboards:** Recommend test on real iOS 17 device (simulator CJK behavior may differ) if available.
 
-**Phases with standard patterns (can skip deep research):**
-- **Phase 3 (Edit):** iOS text editing is well-documented; UITextView and SwiftUI TextEditor are standard frameworks. Toolbar markdown insertion is straightforward string manipulation
-- **Phase 5 (Polish):** Network status detection (Network.framework), offline UX patterns, and error messaging are iOS best practices with ample documentation
+**Phases with standard patterns (skip deep research):**
+- **Phases 1-3 (completed):** No research needed; implementations validated through execution.
+- **Phase 5 (polish):** Keyboard shortcuts, search, and syntax highlighting are standard iOS patterns with ample documentation.
 
 ## Confidence Assessment
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| **Stack Choice** | HIGH | Swift/SwiftUI is iOS 2025-26 standard; Google Drive REST API v3 is official and well-documented; version constraints are clear |
-| **Features** | MEDIUM | Project scope is explicit (v1 = raw text, no preview); table stakes are industry standard for markdown editors; Google Drive-specific features inferred from API capabilities — full validation deferred to early user feedback |
-| **Architecture** | MEDIUM | MVVM + component separation is established iOS pattern; Google Drive integration pattern is sound but specifics (pagination, quota handling) should be verified during Phase 1; conflict resolution approach is proven in Google Docs/Office but not tested in this codebase yet |
-| **Pitfalls** | MEDIUM | Derived from iOS platform patterns, Google Drive API documentation, and markdown editor implementation experience; not verified against current Xcode 16 SDK or latest Google Drive API — recommend testing Phase 1 to validate token refresh behavior |
-
-**Overall confidence:** MEDIUM — Research is informed by current training data (Feb 2025) and established iOS patterns, but several technical decisions should be validated during Phase 1 implementation (OAuth token refresh, dot-folder API behavior, ETag availability). No show-stoppers identified; pitfalls are well-understood and have clear mitigation strategies.
+| **v1.0 Stack (Completed)** | HIGH | Swift, SwiftUI, UITextView, UIDocument, Google Drive API all validated through Phase 3 execution. Core architecture proved sound. |
+| **v1.1 Toolbar Stack** | HIGH | SwiftUI .toolbar, UITextInput, UndoManager are stable iOS 16+ APIs with high community adoption. Implementation patterns clear with code examples. |
+| **v1.0 Features** | HIGH | Phases 1-3 delivered all promised features. Dot folder access confirmed working. Raw text editing confirmed performant. |
+| **v1.1 Features (Toolbar)** | HIGH | Feature scope clear (bold, italic, headers, bullets, tables). Implementation approach well-documented in STACK.md. No ambiguities. |
+| **Architecture** | MEDIUM-HIGH | v1.0 architecture validated through Phase 3. v1.1 extension (Coordinator methods + toolbar modifier) is straightforward addition; no architectural changes needed. |
+| **Pitfalls & Mitigations** | HIGH | Five critical pitfalls well-characterized with clear prevention patterns. Code examples provided in STACK.md and PITFALLS.md. High confidence in avoidability with discipline. |
+| **Overall** | MEDIUM-HIGH | v1.0 core validated; v1.1 approach sound. Main risk is execution discipline on undo/cursor position handling during Phase 4 implementation. No architectural or technical blockers identified. |
 
 ### Gaps to Address
 
-1. **OAuth Token Lifecycle (Phase 1):** Training knowledge of GIDSignIn framework and token refresh is current but implementation details with Xcode 16 should be verified. Mitigation: Build Phase 1 Foundation first, test token refresh manually (force expiration, simulate network errors).
+1. **Emoji handling validation** — Recommend unit tests with family emoji (👨‍👩‍👧), flag combinations (🏳️‍🌈), skin-tone variants (👩🏾, ☝🏽). Test both on simulator and real device (rendering may differ).
 
-2. **Google Drive API Query Syntax (Phase 2):** Dot-folder visibility via `trashed=false` parameter is inferred but should be confirmed with official API documentation. Mitigation: Create test Drive with `.planning` folder, validate it appears in app's folder listing during Phase 2.
+2. **Multi-line selection formatting** — Current architecture assumes single-line operations; multi-line bullet/table insertion needs careful line boundary handling. Phase 4 should include unit tests for 2-5 line selections with newline preservation.
 
-3. **ETag Format & Availability (Phase 4):** ETag-based conflict detection is assumed to be available in files.update response. Mitigation: During Phase 4, verify ETag format in API response and confirm it changes when file is modified externally.
+3. **iOS 17 CJK keyboard behavior** — PITFALLS.md flags potential duplicate delegate calls on iOS 17 with Cangjie/Sucheng/Stroke keyboards. Existing 300ms debounce likely handles this, but recommend real device testing before Phase 4 closes.
 
-4. **File Size Limits (Phase 4-5):** Research assumes Google Drive API doesn't impose hard file size limits <5MB for markdown files, but large file handling (resumable uploads, timeouts) should be tested. Mitigation: Phase 4 should test upload of 10MB+ file with network slowdown.
+4. **Large file performance with toolbar** — Phase 3 validated large files work without toolbar. Phase 4 must validate that toolbar actions don't trigger excessive highlighting re-runs. Recommend profiling with >100KB file.
 
-5. **iOS 16 vs 17 Trade-offs (Phases 1-5):** Stack recommends iOS 17+ for SwiftData, but iOS 16 support may be required. This affects data persistence approach. Mitigation: Early decision needed; Core Data fallback is documented in STACK.md.
+5. **Undo/updateChangeCount interaction** — Current code has EditorView.scheduleSave() debounced at 1.5s. Unclear if toolbar actions call updateChangeCount immediately or wait for scheduleSave debounce. Phase 4 implementation should clarify this and route toolbar actions through binding if needed.
 
 ## Sources
 
-### Primary (MEDIUM-HIGH confidence)
-- **STACK.md research:** Google Drive REST API v3 documentation, Swift.org, Apple SwiftUI/FileProvider documentation, GoogleSignIn SDK GitHub (v7.0+)
-- **FEATURES.md research:** Project requirements (PROJECT.md), iOS markdown editor market patterns (training data), Google Drive API capabilities
-- **ARCHITECTURE.md research:** iOS app architecture patterns (MVVM + Coordinator), Google Drive REST API v3 integration, OAuth 2.0 PKCE flow (RFC 7636)
-- **PITFALLS.md research:** iOS platform patterns, Google Drive API limitations, markdown editor implementation experience, conflict resolution patterns from Google Docs/Office 365
+### Primary (HIGH confidence)
+
+- **Apple Developer Documentation** — UITextView, UndoManager, NSRange, UITextInput protocol, SwiftUI .toolbar modifier
+- **WWDC 2022 (TextKit and Text Views)** — Official Apple guidance on text editing patterns
+- **Apple Developer Forums** — Discussions of UndoManager integration, selectedRange handling, textViewDidChange callbacks
 
 ### Secondary (MEDIUM confidence)
-- Apple Human Interface Guidelines: Document-Based Apps
-- iOS Keychain usage: Apple Security Framework documentation
-- Conflict resolution UX: Common practice across Google Docs, Microsoft Office, Dropbox Paper
 
-### Tertiary (confidence noted with gaps)
-- Xcode 16 specific features and frameworks — not verified in this research
-- Google Drive API v3 current limits and rate quotas — training data current to Feb 2025
-- iOS 17+ specific behavioral changes — requires current iOS developer documentation
+- **Project STACK.md (2026-03-26)** — v1.1 toolbar research; detailed implementation patterns with code examples; validated against iOS markdown editor ecosystem
+- **Project FEATURES.md (2026-03-25)** — Feature scope and MVP definition; based on iOS editor market conventions
+- **Project ARCHITECTURE.md (2026-03-25)** — Component structure and data flow patterns; Google Drive integration validated in Phase 2 execution
+- **Project PITFALLS.md (2026-03-26)** — Comprehensive pitfall research; grounded in developer forum discussions, official docs, and TextKit 2 edge cases
+- **Project Phase 3 execution notes** — Validation of UITextView performance and NSAttributedString highlighting behavior
+
+### Tertiary (MEDIUM-LOW, needs validation)
+
+- **Google Drive API quota and file size limits** — Training knowledge; recommend official documentation review during Phase 4
+- **iOS 17 CJK input method behavior** — Flagged in PITFALLS.md; recommend real device testing before Phase 4 closes
 
 ---
 
-*Research completed: 2026-03-25*
-*Ready for requirements & roadmap: yes*
-*Recommended next step: Proceed to roadmap creation using phase structure above; validate Phase 1 technical decisions (token refresh, dot-folder API) during early implementation*
+*Research completed: 2026-03-26*
+*Researcher agents: STACK, FEATURES, ARCHITECTURE, PITFALLS (parallel research on v1.1 toolbar feature)*
+*Previous research: 2026-03-25 (v1.0 phases 1-5)*
+*Ready for Phase 4 planning: yes*
