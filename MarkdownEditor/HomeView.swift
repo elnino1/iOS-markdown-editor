@@ -41,21 +41,14 @@ struct HomeView: View {
             }
             .fileImporter(
                 isPresented: $isPickerPresented,
-                allowedContentTypes: [
-                    UTType(filenameExtension: "md") ?? .plainText,
-                    UTType(filenameExtension: "markdown") ?? .plainText,
-                    .plainText
-                ],
+                allowedContentTypes: [.item],
                 allowsMultipleSelection: false
             ) { result in
                 switch result {
                 case .success(let urls):
                     guard let url = urls.first else { return }
-                    // fileImporter automatically handles security-scoped access
-                    // UIDocument.open will coordinate access
                     appState.open(url: url)
                 case .failure(let error):
-                    // File picker cancelled or failed — no action needed for Phase 1
                     print("File picker error: \(error.localizedDescription)")
                 }
             }
