@@ -13,7 +13,7 @@
 
 - [x] **Phase 1: Core** - Open files + raw text editing + save back (completed 2026-03-25)
 - [ ] **Phase 2: Editor Experience** - Syntax coloring, unsaved indicator, light/dark mode
-- [ ] **Phase 3: Polish** - Edge cases, error handling, refinements
+- [x] **Phase 3: Polish** - Edge cases, error handling, refinements (completed 2026-03-26)
 
 ---
 
@@ -78,7 +78,7 @@ Plans:
 3. App handles non-UTF-8 encoded files without corrupting content
 4. Recently opened files list lets user quickly reopen previous files without re-navigating
 
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 
 Plans:
 - [ ] 03-01-PLAN.md — Error alerts for open failures, picker errors, and save failures (FileOperationError enum + alerts in HomeView + EditorView)
@@ -93,7 +93,7 @@ Plans:
 |-------|------|--------------|--------|-----------|
 | 1 - Core | 3/3 | Complete   | 2026-03-25 | - |
 | 2 - Editor Experience | 1/3 | In Progress|  | - |
-| 3 - Polish | 2/3 | In Progress|  | - |
+| 3 - Polish | 3/3 | Complete   | 2026-03-26 | - |
 
 ---
 

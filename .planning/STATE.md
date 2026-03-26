@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-02-PLAN.md
-last_updated: "2026-03-26T09:19:21.725Z"
+stopped_at: Completed 03-03-PLAN.md
+last_updated: "2026-03-26T09:25:49.941Z"
 progress:
   total_phases: 3
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 9
-  completed_plans: 8
+  completed_plans: 9
 ---
 
 # Project State: iOS Markdown Editor
@@ -126,6 +126,9 @@ From research/SUMMARY.md:
 | Try Again reopens picker via both paths | Simulator uses DocumentPickerPresenter; device uses isPickerPresented = true; alert handler branches on targetEnvironment | 03-01 | ✓ Implemented |
 | highlightingDisabled is @State in EditorView | Keeps highlighting off after alert dismissal; derived from largeFileWarning would re-enable on dismiss | 03-02 | ✓ Implemented |
 | onChange(isEditorPresented) resets highlightingDisabled | Fires before largeFileWarning onChange; allows correct re-disable if new file is also large | 03-02 | ✓ Implemented |
+| Bookmark-based persistence in RecentFilesStore | Security-scoped bookmarks survive process restarts; raw URLs do not | 03-03 | ✓ Implemented |
+| recentFiles dedup by filename (best-effort) | Handles files moved/renamed outside the app without complex equality checks | 03-03 | ✓ Implemented |
+| openFilePicker() extracted as private func | Deduplicates simulator/device branching across empty-state button, list button, and Try Again alert | 03-03 | ✓ Implemented |
 
 ---
 
@@ -170,7 +173,7 @@ From research/SUMMARY.md:
 
 **Blockers:** None
 
-**Stopped at:** Completed 03-01-PLAN.md
+**Stopped at:** Completed 03-03-PLAN.md
 
 ### Plan 01-02 Execution (2026-03-25)
 
@@ -275,6 +278,28 @@ From research/SUMMARY.md:
 **Blockers:** None
 
 **Stopped at:** Completed 03-02-PLAN.md
+
+### Plan 03-03 Execution (2026-03-26)
+
+**Actions:**
+
+- Created RecentFilesStore.swift: ObservableObject with bookmark-based UserDefaults persistence, 10-item limit, add/remove/resolve methods
+- Added recentFiles: RecentFilesStore property to AppState
+- Called recentFiles.add(url:) in _openDirectly success branch after each successful open
+- Registered RecentFilesStore.swift in project.pbxproj (PBXFileReference + PBXBuildFile + Sources build phase)
+- Restructured HomeView with Group conditional: emptyStateView (unchanged) when entries empty; recentFilesListView (List with two sections) when non-empty
+- Extracted openFilePicker() private func to deduplicate simulator/device branching
+- All 9 tests pass: TEST SUCCEEDED; BUILD SUCCEEDED
+
+**Decisions:**
+
+- Bookmark-based persistence (not raw URLs) so entries survive security scope changes
+- Best-effort dedup by filename handles renamed/moved files without complex equality
+- openFilePicker() extracted as private func — deduplicates 3 call sites
+
+**Blockers:** None
+
+**Stopped at:** Completed 03-03-PLAN.md
 
 ### Plan 03-01 Execution (2026-03-26)
 
