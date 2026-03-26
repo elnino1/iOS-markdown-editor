@@ -7,6 +7,9 @@ struct EditorView: View {
     @State private var showUnsavedAlert = false
     @State private var showSaveError = false
     @State private var pendingURL: URL? = nil
+    @State private var highlightingDisabled = false
+    @State private var showLargeFileAlert = false
+    @State private var showEncodingAlert = false
 
     private var document: MarkdownDocument? { appState.document }
 
@@ -21,7 +24,8 @@ struct EditorView: View {
                                 doc.text = newValue
                                 scheduleSave(for: doc)
                             }
-                        )
+                        ),
+                        isHighlightingEnabled: !highlightingDisabled
                     )
                     .ignoresSafeArea(.keyboard)
                 } else {
@@ -49,6 +53,22 @@ struct EditorView: View {
                         appState.openAfterResolvingConflict(url: url)
                     }
                 }
+            }
+            .onChange(of: appState.isEditorPresented) { isPresented in
+                if isPresented {
+                    // New document session starting — reset per-session highlighting state
+                    // (largeFileWarning onChange will re-enable if needed)
+                    highlightingDisabled = false
+                }
+            }
+            .onChange(of: appState.largeFileWarning) { isLarge in
+                if isLarge {
+                    highlightingDisabled = true
+                    showLargeFileAlert = true
+                }
+            }
+            .onChange(of: appState.encodingFallbackWarning) { isFallback in
+                if isFallback { showEncodingAlert = true }
             }
         }
         .alert("Unsaved Changes", isPresented: $showUnsavedAlert) {
@@ -79,6 +99,16 @@ struct EditorView: View {
             Button("OK", role: .cancel) { }
         } message: {
             Text(FileOperationError.saveFailed.message)
+        }
+        .alert("Large File", isPresented: $showLargeFileAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("This file is large. Syntax highlighting has been disabled to keep the editor responsive.")
+        }
+        .alert("Encoding Changed", isPresented: $showEncodingAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("This file wasn't encoded as UTF-8. It has been read using a compatible encoding. When you save, it will be saved as UTF-8.")
         }
     }
 

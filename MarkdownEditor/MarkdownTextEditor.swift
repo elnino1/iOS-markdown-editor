@@ -8,6 +8,7 @@ import Combine
 struct MarkdownTextEditor: UIViewRepresentable {
     @Binding var text: String
     var font: UIFont = UIFont.preferredFont(forTextStyle: .body).withSize(16)
+    var isHighlightingEnabled: Bool = true
 
     func makeUIView(context: Context) -> UITextView {
         let tv = UITextView()
@@ -24,15 +25,23 @@ struct MarkdownTextEditor: UIViewRepresentable {
         return tv
     }
 
-    func updateUIView(_ tv: UITextView, context: Context) {
-        guard tv.text != text else { return }
-        let selectedRange = tv.selectedRange
-        tv.attributedText = HighlightingService.applyMarkdownColors(to: text, baseFont: font)
-        tv.selectedRange = selectedRange
+    func makeCoordinator() -> Coordinator {
+        Coordinator(text: $text, font: font, isHighlightingEnabled: isHighlightingEnabled)
     }
 
-    func makeCoordinator() -> Coordinator {
-        Coordinator(text: $text, font: font)
+    func updateUIView(_ tv: UITextView, context: Context) {
+        // Keep coordinator in sync with current highlighting flag
+        context.coordinator.isHighlightingEnabled = isHighlightingEnabled
+        guard tv.text != text else { return }
+        let selectedRange = tv.selectedRange
+        if isHighlightingEnabled {
+            tv.attributedText = HighlightingService.applyMarkdownColors(to: text, baseFont: font)
+        } else {
+            tv.text = text
+            tv.textColor = UIColor.label
+            tv.font = UIFont.monospacedSystemFont(ofSize: 15, weight: .regular)
+        }
+        tv.selectedRange = selectedRange
     }
 
     // MARK: - Coordinator
@@ -40,15 +49,19 @@ struct MarkdownTextEditor: UIViewRepresentable {
     final class Coordinator: NSObject, UITextViewDelegate {
         @Binding var text: String
         let font: UIFont
+        var isHighlightingEnabled: Bool
         private var highlightTimer: AnyCancellable?
 
-        init(text: Binding<String>, font: UIFont) {
+        init(text: Binding<String>, font: UIFont, isHighlightingEnabled: Bool) {
             _text = text
             self.font = font
+            self.isHighlightingEnabled = isHighlightingEnabled
         }
 
         func textViewDidChange(_ textView: UITextView) {
             text = textView.text
+
+            guard isHighlightingEnabled else { return }
 
             // Debounce highlighting: 300ms after typing stops
             highlightTimer?.cancel()
