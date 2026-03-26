@@ -1,10 +1,10 @@
 # Requirements: iOS Markdown Editor
 
 **Defined:** 2026-03-25
-**Updated:** 2026-03-25 (architectural pivot — removed Drive API/OAuth, adopted document sharing)
+**Updated:** 2026-03-26 (v1.1 milestone — formatting toolbar)
 **Core Value:** A focused markdown editor that works with any file source — open from anywhere, edit, save back.
 
-## v1 Requirements
+## v1.0 Requirements (Complete)
 
 ### File Access
 
@@ -22,12 +22,32 @@
 
 - [x] **APPR-01**: App supports light and dark mode
 
+## v1.1 Requirements
+
+### Toolbar
+
+- [ ] **TOOL-01**: Editor shows a formatting toolbar docked above the keyboard while editing
+- [ ] **TOOL-02**: User can tap a button in the toolbar to dismiss the keyboard
+
+### Formatting
+
+- [ ] **FMT-01**: User can tap Bold to wrap the selected text in `**markers**` (or insert `**text**` at cursor if nothing selected)
+- [ ] **FMT-02**: User can tap Italic to wrap the selected text in `*markers*` (or insert `*text*` at cursor if nothing selected)
+- [ ] **FMT-03**: User can tap Bullet to prefix the current line with `- `
+- [ ] **FMT-04**: User can tap Table to insert a 3-column × 2-row markdown table template at the cursor
+
+### Undo / Redo
+
+- [ ] **UNDO-01**: User can tap Undo in the toolbar to undo the last edit or formatting action
+- [ ] **UNDO-02**: User can tap Redo in the toolbar to redo the last undone action
+
 ## v2 Requirements
 
 ### Editor Enhancements
 
-- **EDIT-V2-01**: Formatting toolbar (bold, italic, H1-H3, bullet list, numbered list)
-- **EDIT-V2-02**: Markdown preview / rendered output toggle
+- **EDIT-V2-01**: Markdown preview / rendered output toggle
+- **EDIT-V2-02**: Formatting toolbar with header buttons (H1, H2, H3)
+- **EDIT-V2-03**: Multi-line bullet list (prefix all selected lines)
 
 ## Out of Scope
 
@@ -40,6 +60,8 @@
 | Real-time collaboration | Out of scope |
 | Offline editing | Handled by source app (Google Drive app has offline mode) |
 | App Store publishing | Personal use first |
+| Bold/italic toggle (remove markers if already wrapped) | Added complexity, defer to v2 |
+| Header buttons (H1/H2/H3) | Not in user scope for v1.1, defer to v2 |
 
 ## Traceability
 
@@ -54,12 +76,20 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EDIT-03 | Phase 2 | Complete |
 | EDIT-04 | Phase 2 | Complete |
 | APPR-01 | Phase 2 | Complete |
+| TOOL-01 | Phase 4 | Pending |
+| TOOL-02 | Phase 4 | Pending |
+| FMT-01 | Phase 4 | Pending |
+| FMT-02 | Phase 4 | Pending |
+| FMT-03 | Phase 4 | Pending |
+| FMT-04 | Phase 4 | Pending |
+| UNDO-01 | Phase 4 | Pending |
+| UNDO-02 | Phase 4 | Pending |
 
 **Coverage:**
-- v1 requirements: 7 total
-- Mapped to phases: 7
-- Unmapped: 0 ✓
+- v1.1 requirements: 8 total
+- Mapped to phases: TBD (roadmapper will assign)
+- Unmapped: 8 ⚠️ (pending roadmap)
 
 ---
 *Requirements defined: 2026-03-25*
-*Last updated: 2026-03-25 after architectural pivot*
+*Last updated: 2026-03-26 — v1.1 milestone: formatting toolbar (8 new requirements)*
