@@ -40,57 +40,57 @@ struct HomeView: View {
                 EditorView()
                     .environmentObject(appState)
             }
-            // UIDocumentPickerViewController via sheet — more reliable than .fileImporter on iOS 26
-            .sheet(isPresented: $isPickerPresented) {
-                DocumentPicker { url in
-                    print("HomeView: DocumentPicker selected \(url.lastPathComponent)")
-                    isPickerPresented = false
+            // Zero-size bridge that presents UIDocumentPickerViewController as a true modal.
+            // SwiftUI .fileImporter and .sheet-embedded UIViewControllerRepresentable
+            // both fail to fire the delegate on iOS 26 — presenting directly works.
+            .background(
+                DocumentPickerBridge(isPresented: $isPickerPresented) { url in
+                    print("HomeView: picker selected \(url.lastPathComponent)")
                     appState.open(url: url)
-                } onCancel: {
-                    print("HomeView: DocumentPicker cancelled")
-                    isPickerPresented = false
                 }
-                .ignoresSafeArea()
-            }
+            )
         }
     }
 }
 
-// MARK: - UIDocumentPickerViewController wrapper
+// MARK: - DocumentPickerBridge
 
-/// Wraps UIDocumentPickerViewController directly — bypasses SwiftUI .fileImporter
-/// which does not fire its result callback reliably on iOS 26 simulator.
-private struct DocumentPicker: UIViewControllerRepresentable {
+/// Presents UIDocumentPickerViewController as a true UIKit modal from the hosting
+/// view controller. Avoids SwiftUI sheet embedding which prevents the delegate from firing.
+private struct DocumentPickerBridge: UIViewControllerRepresentable {
+    @Binding var isPresented: Bool
     let onPick: (URL) -> Void
-    let onCancel: () -> Void
 
-    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
+    func makeCoordinator() -> Coordinator { Coordinator(bridge: self) }
+
+    func makeUIViewController(context: Context) -> UIViewController {
+        context.coordinator.host
+    }
+
+    func updateUIViewController(_ vc: UIViewController, context: Context) {
+        guard isPresented, vc.presentedViewController == nil else { return }
         let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.item])
         picker.delegate = context.coordinator
         picker.allowsMultipleSelection = false
-        return picker
+        vc.present(picker, animated: true)
     }
 
-    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {}
-
-    func makeCoordinator() -> Coordinator { Coordinator(onPick: onPick, onCancel: onCancel) }
-
     final class Coordinator: NSObject, UIDocumentPickerDelegate {
-        let onPick: (URL) -> Void
-        let onCancel: () -> Void
+        /// Thin host VC — SwiftUI adds it to the hierarchy, giving us a presentation context.
+        let host = UIViewController()
+        var bridge: DocumentPickerBridge
 
-        init(onPick: @escaping (URL) -> Void, onCancel: @escaping () -> Void) {
-            self.onPick = onPick
-            self.onCancel = onCancel
-        }
+        init(bridge: DocumentPickerBridge) { self.bridge = bridge }
 
         func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+            bridge.isPresented = false
             guard let url = urls.first else { return }
-            onPick(url)
+            bridge.onPick(url)
         }
 
         func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-            onCancel()
+            print("HomeView: picker cancelled")
+            bridge.isPresented = false
         }
     }
 }
