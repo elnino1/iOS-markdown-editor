@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 import UniformTypeIdentifiers
 
 struct HomeView: View {
@@ -39,19 +40,57 @@ struct HomeView: View {
                 EditorView()
                     .environmentObject(appState)
             }
-            .fileImporter(
-                isPresented: $isPickerPresented,
-                allowedContentTypes: [.item],
-                allowsMultipleSelection: false
-            ) { result in
-                switch result {
-                case .success(let urls):
-                    guard let url = urls.first else { return }
+            // UIDocumentPickerViewController via sheet — more reliable than .fileImporter on iOS 26
+            .sheet(isPresented: $isPickerPresented) {
+                DocumentPicker { url in
+                    print("HomeView: DocumentPicker selected \(url.lastPathComponent)")
+                    isPickerPresented = false
                     appState.open(url: url)
-                case .failure(let error):
-                    print("File picker error: \(error.localizedDescription)")
+                } onCancel: {
+                    print("HomeView: DocumentPicker cancelled")
+                    isPickerPresented = false
                 }
+                .ignoresSafeArea()
             }
+        }
+    }
+}
+
+// MARK: - UIDocumentPickerViewController wrapper
+
+/// Wraps UIDocumentPickerViewController directly — bypasses SwiftUI .fileImporter
+/// which does not fire its result callback reliably on iOS 26 simulator.
+private struct DocumentPicker: UIViewControllerRepresentable {
+    let onPick: (URL) -> Void
+    let onCancel: () -> Void
+
+    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
+        let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.item])
+        picker.delegate = context.coordinator
+        picker.allowsMultipleSelection = false
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator { Coordinator(onPick: onPick, onCancel: onCancel) }
+
+    final class Coordinator: NSObject, UIDocumentPickerDelegate {
+        let onPick: (URL) -> Void
+        let onCancel: () -> Void
+
+        init(onPick: @escaping (URL) -> Void, onCancel: @escaping () -> Void) {
+            self.onPick = onPick
+            self.onCancel = onCancel
+        }
+
+        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+            guard let url = urls.first else { return }
+            onPick(url)
+        }
+
+        func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+            onCancel()
         }
     }
 }
