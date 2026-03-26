@@ -20,6 +20,9 @@
 		A100000C /* RecentFilesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001C /* RecentFilesStore.swift */; };
 		A2000001 /* MarkdownHighlighterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000011 /* MarkdownHighlighterTests.swift */; };
 		A2000002 /* UnsavedChangesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000012 /* UnsavedChangesTests.swift */; };
+		A2000003 /* FormattingOperationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000013 /* FormattingOperationsTests.swift */; };
+		A2000004 /* UndoRedoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000014 /* UndoRedoTests.swift */; };
+		A2000005 /* FormattingToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000015 /* FormattingToolbarTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +52,9 @@
 		A2000010 /* MarkdownEditorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarkdownEditorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2000011 /* MarkdownHighlighterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownHighlighterTests.swift; sourceTree = "<group>"; };
 		A2000012 /* UnsavedChangesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsavedChangesTests.swift; sourceTree = "<group>"; };
+		A2000013 /* FormattingOperationsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattingOperationsTests.swift; sourceTree = "<group>"; };
+		A2000014 /* UndoRedoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoRedoTests.swift; sourceTree = "<group>"; };
+		A2000015 /* FormattingToolbarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattingToolbarTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -116,6 +122,9 @@
 			children = (
 				A2000011 /* MarkdownHighlighterTests.swift */,
 				A2000012 /* UnsavedChangesTests.swift */,
+				A2000013 /* FormattingOperationsTests.swift */,
+				A2000014 /* UndoRedoTests.swift */,
+				A2000015 /* FormattingToolbarTests.swift */,
 			);
 			path = MarkdownEditorTests;
 			sourceTree = "<group>";
@@ -230,6 +239,9 @@
 			files = (
 				A2000001 /* MarkdownHighlighterTests.swift in Sources */,
 				A2000002 /* UnsavedChangesTests.swift in Sources */,
+				A2000003 /* FormattingOperationsTests.swift in Sources */,
+				A2000004 /* UndoRedoTests.swift in Sources */,
+				A2000005 /* FormattingToolbarTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
