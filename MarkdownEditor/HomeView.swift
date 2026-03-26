@@ -8,42 +8,13 @@ struct HomeView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
-                Spacer()
-
-                Image(systemName: "doc.text")
-                    .font(.system(size: 64))
-                    .foregroundStyle(.secondary)
-
-                VStack(spacing: 8) {
-                    Text("Markdown Editor")
-                        .font(.title2.weight(.semibold))
-                    Text("Open a markdown file to get started")
-                        .font(.body)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
+            Group {
+                if appState.recentFiles.entries.isEmpty {
+                    emptyStateView
+                } else {
+                    recentFilesListView
                 }
-
-                Button("Open File") {
-                    #if targetEnvironment(simulator)
-                    // .fileImporter callback never fires on iOS 26 simulator.
-                    // UIDocumentPickerViewController presented from window root VC
-                    // at least opens the picker; try deprecated init for a different code path.
-                    DocumentPickerPresenter.present { url in
-                        print("HomeView: simulator picker selected \(url.lastPathComponent)")
-                        appState.open(url: url)
-                    }
-                    #else
-                    isPickerPresented = true
-                    #endif
-                }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
-                .frame(minWidth: 44, minHeight: 44)
-
-                Spacer()
             }
-            .padding(24)
             .navigationTitle("Markdown Editor")
             .navigationBarTitleDisplayMode(.inline)
             .alert(
@@ -55,14 +26,7 @@ struct HomeView: View {
             ) {
                 Button("Try Again") {
                     appState.openError = nil
-                    #if targetEnvironment(simulator)
-                    DocumentPickerPresenter.present { url in
-                        print("HomeView: simulator picker selected \(url.lastPathComponent)")
-                        appState.open(url: url)
-                    }
-                    #else
-                    isPickerPresented = true
-                    #endif
+                    openFilePicker()
                 }
                 Button("Cancel", role: .cancel) {
                     appState.openError = nil
@@ -93,6 +57,89 @@ struct HomeView: View {
                 }
             }
         }
+    }
+
+    // MARK: - Empty state (no recent files)
+
+    private var emptyStateView: some View {
+        VStack(spacing: 24) {
+            Spacer()
+
+            Image(systemName: "doc.text")
+                .font(.system(size: 64))
+                .foregroundStyle(.secondary)
+
+            VStack(spacing: 8) {
+                Text("Markdown Editor")
+                    .font(.title2.weight(.semibold))
+                Text("Open a markdown file to get started")
+                    .font(.body)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+
+            Button("Open File") {
+                openFilePicker()
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .frame(minWidth: 44, minHeight: 44)
+
+            Spacer()
+        }
+        .padding(24)
+    }
+
+    // MARK: - Recent files list
+
+    private var recentFilesListView: some View {
+        List {
+            Section {
+                Button("Open Other File...") {
+                    openFilePicker()
+                }
+                .frame(minHeight: 44)
+            }
+            Section("Recent") {
+                ForEach(appState.recentFiles.entries) { entry in
+                    Button {
+                        if let url = appState.recentFiles.resolve(entry) {
+                            appState.open(url: url)
+                        }
+                    } label: {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(entry.filename)
+                                .font(.body)
+                                .foregroundStyle(.primary)
+                            Text(entry.lastOpenedAt, style: .relative)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(minHeight: 44)
+                    }
+                }
+                .onDelete { offsets in
+                    appState.recentFiles.remove(at: offsets)
+                }
+            }
+        }
+        .listStyle(.insetGrouped)
+    }
+
+    // MARK: - Picker action
+
+    private func openFilePicker() {
+        #if targetEnvironment(simulator)
+        // .fileImporter callback never fires on iOS 26 simulator.
+        // UIDocumentPickerViewController presented from window root VC
+        // at least opens the picker; try deprecated init for a different code path.
+        DocumentPickerPresenter.present { url in
+            print("HomeView: simulator picker selected \(url.lastPathComponent)")
+            appState.open(url: url)
+        }
+        #else
+        isPickerPresented = true
+        #endif
     }
 }
 
