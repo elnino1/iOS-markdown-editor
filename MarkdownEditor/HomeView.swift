@@ -46,6 +46,30 @@ struct HomeView: View {
             .padding(24)
             .navigationTitle("Markdown Editor")
             .navigationBarTitleDisplayMode(.inline)
+            .alert(
+                appState.openError?.title ?? "Error",
+                isPresented: Binding(
+                    get: { appState.openError != nil },
+                    set: { if !$0 { appState.openError = nil } }
+                )
+            ) {
+                Button("Try Again") {
+                    appState.openError = nil
+                    #if targetEnvironment(simulator)
+                    DocumentPickerPresenter.present { url in
+                        print("HomeView: simulator picker selected \(url.lastPathComponent)")
+                        appState.open(url: url)
+                    }
+                    #else
+                    isPickerPresented = true
+                    #endif
+                }
+                Button("Cancel", role: .cancel) {
+                    appState.openError = nil
+                }
+            } message: {
+                Text(appState.openError?.message ?? "")
+            }
             .sheet(isPresented: $appState.isEditorPresented) {
                 EditorView()
                     .environmentObject(appState)
@@ -65,7 +89,7 @@ struct HomeView: View {
                     print("HomeView: fileImporter selected \(url.lastPathComponent)")
                     appState.open(url: url)
                 case .failure(let error):
-                    print("HomeView: fileImporter error — \(error)")
+                    appState.openError = FileOperationError.from(error)
                 }
             }
         }

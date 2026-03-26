@@ -5,6 +5,7 @@ struct EditorView: View {
     @EnvironmentObject private var appState: AppState
     @State private var saveTimer: AnyCancellable? = nil
     @State private var showUnsavedAlert = false
+    @State private var showSaveError = false
     @State private var pendingURL: URL? = nil
 
     private var document: MarkdownDocument? { appState.document }
@@ -74,6 +75,11 @@ struct EditorView: View {
         } message: {
             Text("Save changes before opening a new file?")
         }
+        .alert("Save Failed", isPresented: $showSaveError) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(FileOperationError.saveFailed.message)
+        }
     }
 
     // MARK: - Auto-save
@@ -99,7 +105,12 @@ struct EditorView: View {
             return
         }
         saveTimer?.cancel()
-        doc.save(to: doc.fileURL, for: .forOverwriting) { _ in
+        doc.save(to: doc.fileURL, for: .forOverwriting) { success in
+            if !success {
+                Task { @MainActor in
+                    self.showSaveError = true
+                }
+            }
             completion()
         }
     }
