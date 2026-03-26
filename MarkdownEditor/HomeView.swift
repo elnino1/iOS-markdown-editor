@@ -42,7 +42,8 @@ struct HomeView: View {
             .fileImporter(
                 isPresented: $isPickerPresented,
                 allowedContentTypes: [
-                    UTType(importedAs: "net.daringfireball.markdown"),
+                    UTType(filenameExtension: "md") ?? .plainText,
+                    UTType(filenameExtension: "markdown") ?? .plainText,
                     .plainText
                 ],
                 allowsMultipleSelection: false
