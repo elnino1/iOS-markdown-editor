@@ -46,6 +46,7 @@ struct MarkdownTextEditor: UIViewRepresentable {
             tv.font = UIFont.monospacedSystemFont(ofSize: 15, weight: .regular)
         }
         tv.selectedRange = selectedRange
+        tv.scrollRangeToVisible(selectedRange)
     }
 
     // MARK: - Accessory Toolbar
@@ -194,6 +195,7 @@ struct MarkdownTextEditor: UIViewRepresentable {
                         to: self.text, baseFont: self.font
                     )
                     textView.selectedRange = selectedRange
+                    textView.scrollRangeToVisible(selectedRange)
                 }
         }
     }
