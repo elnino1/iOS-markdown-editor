@@ -38,6 +38,7 @@ struct MarkdownTextEditor: UIViewRepresentable {
         context.coordinator.isHighlightingEnabled = isHighlightingEnabled
         guard tv.text != text else { return }
         let selectedRange = tv.selectedRange
+        tv.undoManager?.disableUndoRegistration()
         if isHighlightingEnabled {
             tv.attributedText = HighlightingService.applyMarkdownColors(to: text, baseFont: font)
         } else {
@@ -45,6 +46,7 @@ struct MarkdownTextEditor: UIViewRepresentable {
             tv.textColor = UIColor.label
             tv.font = UIFont.monospacedSystemFont(ofSize: 15, weight: .regular)
         }
+        tv.undoManager?.enableUndoRegistration()
         tv.selectedRange = selectedRange
         tv.scrollRangeToVisible(selectedRange)
     }
@@ -191,9 +193,11 @@ struct MarkdownTextEditor: UIViewRepresentable {
                 .sink { [weak textView, weak self] _ in
                     guard let textView, let self else { return }
                     let selectedRange = textView.selectedRange
+                    textView.undoManager?.disableUndoRegistration()
                     textView.attributedText = HighlightingService.applyMarkdownColors(
                         to: self.text, baseFont: self.font
                     )
+                    textView.undoManager?.enableUndoRegistration()
                     textView.selectedRange = selectedRange
                     textView.scrollRangeToVisible(selectedRange)
                 }
