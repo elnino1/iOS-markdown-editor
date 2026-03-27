@@ -24,6 +24,7 @@
 		A2000003 /* FormattingOperationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000013 /* FormattingOperationsTests.swift */; };
 		A2000004 /* UndoRedoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000014 /* UndoRedoTests.swift */; };
 		A2000005 /* FormattingToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000015 /* FormattingToolbarTests.swift */; };
+		A2000006 /* MarkdownRendererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000016 /* MarkdownRendererTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		A2000013 /* FormattingOperationsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattingOperationsTests.swift; sourceTree = "<group>"; };
 		A2000014 /* UndoRedoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoRedoTests.swift; sourceTree = "<group>"; };
 		A2000015 /* FormattingToolbarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattingToolbarTests.swift; sourceTree = "<group>"; };
+		A2000016 /* MarkdownRendererTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownRendererTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -128,6 +130,7 @@
 				A2000013 /* FormattingOperationsTests.swift */,
 				A2000014 /* UndoRedoTests.swift */,
 				A2000015 /* FormattingToolbarTests.swift */,
+				A2000016 /* MarkdownRendererTests.swift */,
 			);
 			path = MarkdownEditorTests;
 			sourceTree = "<group>";
@@ -246,6 +249,7 @@
 				A2000003 /* FormattingOperationsTests.swift in Sources */,
 				A2000004 /* UndoRedoTests.swift in Sources */,
 				A2000005 /* FormattingToolbarTests.swift in Sources */,
+				A2000006 /* MarkdownRendererTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
