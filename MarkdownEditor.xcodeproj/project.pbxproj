@@ -27,6 +27,9 @@
 		A2000006 /* MarkdownRendererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000016 /* MarkdownRendererTests.swift */; };
 		A100000E /* markdown-preview.css in Resources */ = {isa = PBXBuildFile; fileRef = A1000020A /* markdown-preview.css */; };
 		A100000F /* markdown-preview.js in Resources */ = {isa = PBXBuildFile; fileRef = A1000020B /* markdown-preview.js */; };
+		A100001E0 /* MarkdownRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100001E /* MarkdownRenderer.swift */; };
+		A100001F0 /* markdown-it.min.js in Resources */ = {isa = PBXBuildFile; fileRef = A100001F /* markdown-it.min.js */; };
+		A10000200 /* markdown-it-table.min.js in Resources */ = {isa = PBXBuildFile; fileRef = A1000020C /* markdown-it-table.min.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +66,9 @@
 		A2000016 /* MarkdownRendererTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownRendererTests.swift; sourceTree = "<group>"; };
 		A1000020A /* markdown-preview.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = "markdown-preview.css"; sourceTree = "<group>"; };
 		A1000020B /* markdown-preview.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "markdown-preview.js"; sourceTree = "<group>"; };
+		A100001E /* MarkdownRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownRenderer.swift; sourceTree = "<group>"; };
+		A100001F /* markdown-it.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "markdown-it.min.js"; sourceTree = "<group>"; };
+		A1000020C /* markdown-it-table.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "markdown-it-table.min.js"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -110,6 +116,7 @@
 				A100001B /* MarkdownTextEditor.swift */,
 				A100001C /* RecentFilesStore.swift */,
 				A100001D /* FormattingService.swift */,
+				A100001E /* MarkdownRenderer.swift */,
 				A1000015 /* Assets.xcassets */,
 				A1000016 /* Info.plist */,
 				A1000033 /* Resources */,
@@ -122,6 +129,8 @@
 			children = (
 				A1000020A /* markdown-preview.css */,
 				A1000020B /* markdown-preview.js */,
+				A100001F /* markdown-it.min.js */,
+				A1000020C /* markdown-it-table.min.js */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -232,6 +241,8 @@
 				A1000005 /* Assets.xcassets in Resources */,
 				A100000E /* markdown-preview.css in Resources */,
 				A100000F /* markdown-preview.js in Resources */,
+				A100001F0 /* markdown-it.min.js in Resources */,
+				A10000200 /* markdown-it-table.min.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,6 +264,7 @@
 				A100000B /* MarkdownTextEditor.swift in Sources */,
 				A100000C /* RecentFilesStore.swift in Sources */,
 				A100000D /* FormattingService.swift in Sources */,
+				A100001E0 /* MarkdownRenderer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
