@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Markdown Preview
 status: unknown
-stopped_at: Completed 05-01-PLAN.md
-last_updated: "2026-03-27T20:58:20.455Z"
+stopped_at: Completed 05-02-PLAN.md
+last_updated: "2026-03-27T22:13:30Z"
 progress:
   total_phases: 2
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State: iOS Markdown Editor
@@ -24,7 +24,7 @@ progress:
 ## Current Position
 
 Phase: 5 (Preview Infrastructure) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 ## Project Reference
 
@@ -74,7 +74,7 @@ TDD pattern: Wave 0 failing stubs before production code (established in v1.1)
 1. **WKWebView loading timing** — `loadHTMLString` is async; delegate `didFinish` must gate any subsequent JS calls
 2. **Dark mode in WKWebView** — Must inject CSS with `prefers-color-scheme`; setting `.overrideUserInterfaceStyle` alone is insufficient for web content
 3. **Link interception** — Must implement `decidePolicyFor navigationAction`; default behavior opens Safari app, not SFSafariViewController
-4. **JS library bundling** — Library file must be in Copy Bundle Resources, not just added to project; verify with `Bundle.main.url(forResource:)`
+4. **JS library bundling** — Library file must be in Copy Bundle Resources; use `Bundle(for: SomeClass.self)` not `Bundle.main` in testable code — `Bundle.main` fails in unit test bundles
 5. **Toggle state** — Editor text must not be re-read from UIDocument on each toggle; keep in-memory string consistent with UITextView content
 
 ---
@@ -89,16 +89,19 @@ TDD pattern: Wave 0 failing stubs before production code (established in v1.1)
 | CSS prefers-color-scheme for dark mode | Automatic with system; no UIKit override needed | ✓ Planned |
 | MarkdownRenderer.generateHTML(from:) is static | Tests call it as static method — Plan 02 must match this exact signature | ✓ 05-01 |
 | Resources in Copy Bundle Resources build phase | Required for Bundle.main.url(forResource:) to find CSS/JS at runtime | ✓ 05-01 |
+| Bundle(for: MarkdownRenderer.self) not Bundle.main | Bundle.main returns test runner bundle during unit tests — class bundle resolves correctly in both contexts | ✓ 05-02 |
+| jsonEncoded() wraps in array before JSONSerialization | String is not valid JSON top-level type; serialize [string], strip outer brackets | ✓ 05-02 |
+| JSContext UMD shims required for markdown-it | var window=this; var module={exports:{}}; — markdown-it UMD needs these to execute outside browser | ✓ 05-02 |
 
 ---
 
 ## Session Continuity
 
-Last session: 2026-03-27T20:58:20.452Z
-Stopped at: Completed 05-01-PLAN.md
-Resume with: `/gsd:plan-phase 5`
+Last session: 2026-03-27T22:13:30Z
+Stopped at: Completed 05-02-PLAN.md
+Resume with: `/gsd:execute-phase 5`
 
 ---
 
 *State initialized: 2026-03-25*
-*Last updated: 2026-03-27 — 05-01 complete: RED stubs + CSS/JS resources in place; ready for Plan 02 (MarkdownRenderer.swift)*
+*Last updated: 2026-03-27 — 05-02 complete: MarkdownRenderer.swift GREEN, all 8 tests pass, markdown-it@14.1.1 + multimd-table bundled; ready for Plan 03 (PreviewView + WKWebView)*
