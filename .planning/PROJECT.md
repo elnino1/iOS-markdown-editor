@@ -8,6 +8,17 @@ A free iOS app for editing markdown files from any location — local storage, i
 
 A focused markdown editor that works with any file source — open from anywhere, edit, save back. No account required, no lock-in.
 
+## Current Milestone: v1.2 Markdown Preview
+
+**Goal:** Add a reading mode so users can view rendered markdown instead of raw syntax.
+
+**Target features:**
+- Toggle button in the editor nav bar to switch between edit and preview modes
+- Full markdown rendering: headings, bold/italic, lists, code blocks, tables, links
+- WKWebView-based renderer for complete fidelity
+- Links open in SFSafariViewController (in-app browser)
+- Light/dark mode support in preview
+
 ## Current State
 
 **Shipped:** v1.1 (2026-03-27)
@@ -37,11 +48,14 @@ A focused markdown editor that works with any file source — open from anywhere
 
 ### Active
 
-_(planning next milestone)_
+- [ ] Toggle between edit and preview mode via nav bar button
+- [ ] Preview renders headings, bold, italic, lists, code blocks, tables, links
+- [ ] Links open in SFSafariViewController
+- [ ] Preview respects light/dark mode
 
 ### Out of Scope
 
-- Markdown preview / rendered output — deferred to v2
+- WYSIWYG editing — tap preview to edit inline, deferred to v2+
 - WYSIWYG editing — deferred to v2+
 - Header buttons (H1/H2/H3) in toolbar — deferred
 - Built-in Google Drive browser — user browses in Google Drive app, then "Open With"
@@ -78,4 +92,4 @@ _(planning next milestone)_
 | Toggle-off formatting | Tapping bold/italic/bullet on already-formatted text strips markers (better UX) | ✓ Implemented |
 
 ---
-*Last updated: 2026-03-27 — v1.1 Formatting Toolbar shipped*
+*Last updated: 2026-03-27 — v1.2 Markdown Preview milestone started*

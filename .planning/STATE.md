@@ -1,9 +1,9 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.1
-milestone_name: Formatting Toolbar
-status: milestone_complete
-stopped_at: v1.1 milestone archived — planning next milestone
+milestone: v1.2
+milestone_name: Markdown Preview
+status: defining_requirements
+stopped_at: Requirements defined — creating roadmap
 last_updated: "2026-03-27T00:00:00.000Z"
 progress:
   total_phases: 1
@@ -23,14 +23,15 @@ progress:
 
 ## Current Position
 
-Milestone v1.1 complete — planning next milestone
+Phase: Not started (defining requirements for v1.2)
+Status: Roadmap being created
 
 ## Project Reference
 
 See: .planning/PROJECT.md (updated 2026-03-27)
 
 **Core value:** Open markdown files from anywhere, edit, save back — including dot folders other apps hide
-**Current focus:** Planning next milestone
+**Current focus:** v1.2 Markdown Preview — WKWebView renderer with edit/preview toggle
 **Shipped:** v1.0 (2026-03-26), v1.1 (2026-03-27)
 
 ---
