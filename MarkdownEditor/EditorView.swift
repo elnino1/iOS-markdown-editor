@@ -10,10 +10,6 @@ struct EditorView: View {
     @State private var highlightingDisabled = false
     @State private var showLargeFileAlert = false
     @State private var showEncodingAlert = false
-    @State private var coordinator: MarkdownTextEditor.Coordinator? = nil
-    @State private var canUndo = false
-    @State private var canRedo = false
-
     private var document: MarkdownDocument? { appState.document }
 
     var body: some View {
@@ -117,85 +113,9 @@ struct EditorView: View {
                     scheduleSave(for: doc)
                 }
             ),
-            isHighlightingEnabled: !highlightingDisabled,
-            coordinatorBinding: $coordinator
+            isHighlightingEnabled: !highlightingDisabled
         )
         .ignoresSafeArea(.keyboard)
-        .toolbar { keyboardToolbar() }
-    }
-
-    @ToolbarContentBuilder
-    private func keyboardToolbar() -> some ToolbarContent {
-        ToolbarItemGroup(placement: .keyboard) {
-            boldButton()
-            italicButton()
-            bulletButton()
-            tableButton()
-            Spacer()
-            undoButton()
-            redoButton()
-            dismissKeyboardButton()
-        }
-    }
-
-    private func boldButton() -> some View {
-        Button { coordinator?.applyBold(); refreshUndoState() } label: {
-            Image(systemName: "bold")
-        }
-        .tint(.blue)
-        .accessibilityLabel("Make text bold")
-    }
-
-    private func italicButton() -> some View {
-        Button { coordinator?.applyItalic(); refreshUndoState() } label: {
-            Image(systemName: "italic")
-        }
-        .tint(.blue)
-        .accessibilityLabel("Make text italic")
-    }
-
-    private func bulletButton() -> some View {
-        Button { coordinator?.applyBullet(); refreshUndoState() } label: {
-            Image(systemName: "list.bullet")
-        }
-        .tint(.blue)
-        .accessibilityLabel("Add bullet to line")
-    }
-
-    private func tableButton() -> some View {
-        Button { coordinator?.insertTable(); refreshUndoState() } label: {
-            Image(systemName: "tablecells")
-        }
-        .tint(.blue)
-        .accessibilityLabel("Insert markdown table")
-    }
-
-    private func undoButton() -> some View {
-        Button { coordinator?.undoAction(); refreshUndoState() } label: {
-            Image(systemName: "arrow.uturn.backward")
-        }
-        .tint(.blue)
-        .opacity(canUndo ? 1.0 : 0.4)
-        .disabled(!canUndo)
-        .accessibilityLabel("Undo last change")
-    }
-
-    private func redoButton() -> some View {
-        Button { coordinator?.redoAction(); refreshUndoState() } label: {
-            Image(systemName: "arrow.uturn.forward")
-        }
-        .tint(.blue)
-        .opacity(canRedo ? 1.0 : 0.4)
-        .disabled(!canRedo)
-        .accessibilityLabel("Redo last undone change")
-    }
-
-    private func dismissKeyboardButton() -> some View {
-        Button { coordinator?.textView?.resignFirstResponder() } label: {
-            Image(systemName: "keyboard.chevron.compact.down")
-        }
-        .tint(.blue)
-        .accessibilityLabel("Dismiss keyboard")
     }
 
     // MARK: - Auto-save
@@ -250,10 +170,4 @@ struct EditorView: View {
         appState.closeCurrentDocument()
     }
 
-    // MARK: - Undo/Redo State
-
-    private func refreshUndoState() {
-        canUndo = coordinator?.textView?.undoManager?.canUndo ?? false
-        canRedo = coordinator?.textView?.undoManager?.canRedo ?? false
-    }
 }
