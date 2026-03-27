@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Formatting Toolbar
-status: unknown
-stopped_at: Completed 04-02-PLAN.md (FormattingService + Coordinator methods)
-last_updated: "2026-03-26T19:39:00.000Z"
+status: complete
+stopped_at: Phase 4 complete — all 3 plans executed, human checkpoint approved
+last_updated: "2026-03-27T00:00:00.000Z"
 progress:
   total_phases: 1
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 3
-  completed_plans: 2
+  completed_plans: 3
 ---
 
 # Project State: iOS Markdown Editor
@@ -32,7 +32,7 @@ Plan: 3 of 3 (plans 01-02 complete)
 |-------|-------|
 | **Core Value** | Open markdown files from anywhere, edit, save back — including dot folders other apps hide |
 | **Platform** | iOS (Swift/SwiftUI), minimum iOS 16.0 |
-| **Stack** | UIDocument, UITextView (UIViewRepresentable), SwiftUI .toolbar, UndoManager |
+| **Stack** | UIDocument, UITextView (UIViewRepresentable), UIToolbar (inputAccessoryView), NSUndoManager |
 | **Scope (v1.1)** | Formatting toolbar: bold, italic, bullet, table, undo/redo, keyboard dismiss |
 | **Out of Scope** | Markdown preview, WYSIWYG, multi-line bullet, header buttons (H1/H2/H3) |
 | **Status** | v1.0 shipped; v1.1 Phase 4 ready to plan |
