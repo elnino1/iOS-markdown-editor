@@ -4,8 +4,8 @@
 **Core Value:** A focused markdown editor that works with any file source — open from anywhere, edit, save back.
 
 **Created:** 2026-03-25
-**Updated:** 2026-03-27 (v1.1 shipped)
-**Status:** Planning next milestone
+**Updated:** 2026-03-27 (v1.2 roadmap created)
+**Status:** Active — v1.2 Markdown Preview
 
 ---
 
@@ -13,6 +13,7 @@
 
 - ✅ **v1.0 MVP** — Phases 1-3 (shipped 2026-03-26)
 - ✅ **v1.1 Formatting Toolbar** — Phase 4 (shipped 2026-03-27)
+- 🔄 **v1.2 Markdown Preview** — Phases 5-6 (in progress)
 
 ---
 
@@ -38,6 +39,35 @@ Full details: `.planning/milestones/v1.1-ROADMAP.md`
 
 </details>
 
+### v1.2 Markdown Preview
+
+- [ ] **Phase 5: Preview Infrastructure** — WKWebView wrapper, JS markdown library bundled, full rendering pipeline with dark mode support
+- [ ] **Phase 6: Preview Integration** — Toggle button wired into editor nav bar, links open in SFSafariViewController
+
+---
+
+## Phase Details
+
+### Phase 5: Preview Infrastructure
+**Goal**: A self-contained markdown renderer exists that correctly renders all required markdown elements and respects system appearance
+**Depends on**: Phase 4 (existing editor)
+**Requirements**: PREV-02, PREV-03, PREV-04, PREV-05, PREV-06, PREV-07, PREV-09
+**Success Criteria** (what must be TRUE):
+  1. Given a string with H1/H2/H3 headings, the renderer displays them with distinct visual sizes and weights
+  2. Given a string with `**bold**` and `*italic*`, the renderer displays styled text (not raw markers)
+  3. Given a string with bullet lists, numbered lists, and fenced code blocks, the renderer displays proper indentation, numbering, and monospace fonts
+  4. Given a string with a markdown table, the renderer displays a visual grid with borders and aligned columns
+  5. The rendered HTML matches the system light/dark mode setting without any manual user action
+
+### Phase 6: Preview Integration
+**Goal**: Users can switch between editing raw markdown and reading the rendered preview without leaving the editor
+**Depends on**: Phase 5
+**Requirements**: PREV-01, PREV-08
+**Success Criteria** (what must be TRUE):
+  1. A button in the editor navigation bar switches the view from the UITextView editor to the rendered preview and back; the button label or icon reflects the current mode
+  2. Tapping a link in the preview opens SFSafariViewController inline (no app switch, no Safari app)
+  3. Returning from preview to edit mode leaves the cursor position and text unchanged
+
 ---
 
 ## Progress Tracking
@@ -48,7 +78,9 @@ Full details: `.planning/milestones/v1.1-ROADMAP.md`
 | 2. Editor Experience | v1.0 | 3/3 | Complete | 2026-03-26 |
 | 3. Polish | v1.0 | 3/3 | Complete | 2026-03-26 |
 | 4. Formatting Toolbar | v1.1 | 3/3 | Complete | 2026-03-27 |
+| 5. Preview Infrastructure | v1.2 | 0/? | Not started | - |
+| 6. Preview Integration | v1.2 | 0/? | Not started | - |
 
 ---
 
-*Updated: 2026-03-27 — v1.1 shipped. Next: plan next milestone with `/gsd:new-milestone`*
+*Updated: 2026-03-27 — v1.2 roadmap created. Next: `/gsd:plan-phase 5`*
