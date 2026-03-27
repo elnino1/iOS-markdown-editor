@@ -58,10 +58,9 @@ Rendered content uses **system font stack** with CSS cascading. Defined sizes an
 | Body | 16px | 400 (regular) | 1.6 | `body`, paragraphs |
 | Label | 14px | 400 (regular) | 1.5 | table cells, list items |
 | Heading 1 | 2em (32px) | 600 (semibold) | 1.2 | `h1` |
-| Heading 2 | 1.5em (24px) | 600 (semibold) | 1.2 | `h2` |
-| Heading 3 | 1.25em (20px) | 600 (semibold) | 1.2 | `h3` |
+| Heading 2 | 1.5em (24px) | 600 (semibold) | 1.2 | `h2`, `h3` |
 | Code | 0.9em (14px @ 16px body) | 400 (regular) | 1.4 | `code`, `pre`, monospace |
-| Strong | 16px | 700 (bold) | 1.6 | `strong`, `**text**` |
+| Strong | 16px | 600 (semibold) | 1.6 | `strong`, `**text**` |
 | Emphasis | 16px | 400 (italic) | 1.6 | `em`, `*text*` |
 
 **Font family cascade (applied globally to HTML):**
@@ -200,7 +199,7 @@ No destructive actions in Phase 5. Phase 6 may add "Discard unsaved changes" whe
 ```
 
 **Body padding/margins (CSS):**
-- Default: `margin: 0; padding: 16px 12px;` (safe area on iPhone)
+- Default: `margin: 0; padding: 16px 16px;` (safe area on iPhone)
 - Max-width: None (responsive to viewport)
 - Safe area applied in SwiftUI container (UIViewRepresentable)
 
@@ -256,8 +255,8 @@ No destructive actions in Phase 5. Phase 6 may add "Discard unsaved changes" whe
 |---------|-----------------|----------------|-------|
 | Heading 1 | `# Title` | `<h1>Title</h1>` | Rendered at 2em with semibold weight |
 | Heading 2 | `## Subtitle` | `<h2>Subtitle</h2>` | Rendered at 1.5em with semibold weight |
-| Heading 3 | `### Section` | `<h3>Section</h3>` | Rendered at 1.25em with semibold weight |
-| Bold | `**text**` | `<strong>text</strong>` | Displayed at weight 700 |
+| Heading 3 | `### Section` | `<h3>Section</h3>` | Rendered at 1.5em (same as h2) with semibold weight |
+| Bold | `**text**` | `<strong>text</strong>` | Displayed at weight 600 (semibold) |
 | Italic | `*text*` | `<em>text</em>` | Displayed at font-style italic |
 | Bullet list | `- item` | `<ul><li>item</li></ul>` | Indented, standard bullet glyph |
 | Numbered list | `1. item` | `<ol><li>item</li></ol>` | Indented, auto-numbered |
