@@ -35,13 +35,17 @@ A focused markdown editor that works with any file source — open from anywhere
 
 ### Active
 
-- [ ] Formatting toolbar appears above the keyboard while editing
-- [ ] Bold button wraps selected text in `**markers**` (or inserts at cursor if no selection)
-- [ ] Italic button wraps selected text in `*markers*` (or inserts at cursor if no selection)
-- [ ] Bullet list button prefixes the current line with `- `
-- [ ] Table button inserts a 3-column × 2-row markdown table template at the cursor
-- [ ] Undo button triggers system undo on the text view
-- [ ] Redo button triggers system redo on the text view
+_(no active requirements — v1.1 milestone complete)_
+
+### Validated in Phase 4: Formatting Toolbar
+
+- ✓ Formatting toolbar appears above the keyboard while editing — Phase 4
+- ✓ Bold button wraps selected text in `**markers**` (or inserts at cursor if no selection) — Phase 4
+- ✓ Italic button wraps selected text in `*markers*` (or inserts at cursor if no selection) — Phase 4
+- ✓ Bullet list button prefixes the current line with `- ` — Phase 4
+- ✓ Table button inserts a 3-column × 2-row markdown table template at the cursor — Phase 4
+- ✓ Undo button triggers system undo on the text view — Phase 4
+- ✓ Redo button triggers system redo on the text view — Phase 4
 
 ### Out of Scope
 
@@ -78,4 +82,4 @@ A focused markdown editor that works with any file source — open from anywhere
 | UIDocument for file coordination | iOS standard for read/write back to original location | ✓ Implemented |
 
 ---
-*Last updated: 2026-03-26 — Milestone v1.1 started: formatting toolbar*
+*Last updated: 2026-03-27 — Phase 4 complete: formatting toolbar shipped. v1.1 milestone complete.*
