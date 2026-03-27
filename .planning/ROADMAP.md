@@ -52,7 +52,7 @@ Full details: `.planning/milestones/v1.1-ROADMAP.md`
 **Goal**: A self-contained markdown renderer exists that correctly renders all required markdown elements and respects system appearance
 **Depends on**: Phase 4 (existing editor)
 **Requirements**: PREV-02, PREV-03, PREV-04, PREV-05, PREV-06, PREV-07, PREV-09
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 
 Plans:
 - [ ] 05-01-PLAN.md — Wave 0: failing test stubs (MarkdownRendererTests) + static assets (markdown-preview.css, markdown-preview.js)
@@ -85,7 +85,7 @@ Plans:
 | 2. Editor Experience | v1.0 | 3/3 | Complete | 2026-03-26 |
 | 3. Polish | v1.0 | 3/3 | Complete | 2026-03-26 |
 | 4. Formatting Toolbar | v1.1 | 3/3 | Complete | 2026-03-27 |
-| 5. Preview Infrastructure | v1.2 | 0/3 | Planned | - |
+| 5. Preview Infrastructure | 1/3 | In Progress|  | - |
 | 6. Preview Integration | v1.2 | 0/? | Not started | - |
 
 ---
