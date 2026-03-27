@@ -197,8 +197,17 @@ struct MarkdownTextEditor: UIViewRepresentable {
                     let highlighted = HighlightingService.applyMarkdownColors(
                         to: self.text, baseFont: self.font
                     )
+                    // Only update attributes — never characters.
+                    // setAttributedString replaces character data which wipes the undo stack.
+                    // Attribute-only edits leave _UITextUndoManager untouched.
+                    guard highlighted.length == textView.textStorage.length else { return }
                     textView.textStorage.beginEditing()
-                    textView.textStorage.setAttributedString(highlighted)
+                    highlighted.enumerateAttributes(
+                        in: NSRange(location: 0, length: highlighted.length),
+                        options: []
+                    ) { attrs, range, _ in
+                        textView.textStorage.setAttributes(attrs, range: range)
+                    }
                     textView.textStorage.endEditing()
                     textView.selectedRange = selectedRange
                     textView.scrollRangeToVisible(selectedRange)
