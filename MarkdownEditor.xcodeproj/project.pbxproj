@@ -25,6 +25,8 @@
 		A2000004 /* UndoRedoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000014 /* UndoRedoTests.swift */; };
 		A2000005 /* FormattingToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000015 /* FormattingToolbarTests.swift */; };
 		A2000006 /* MarkdownRendererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000016 /* MarkdownRendererTests.swift */; };
+		A100000E /* markdown-preview.css in Resources */ = {isa = PBXBuildFile; fileRef = A1000020A /* markdown-preview.css */; };
+		A100000F /* markdown-preview.js in Resources */ = {isa = PBXBuildFile; fileRef = A1000020B /* markdown-preview.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +61,8 @@
 		A2000014 /* UndoRedoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoRedoTests.swift; sourceTree = "<group>"; };
 		A2000015 /* FormattingToolbarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattingToolbarTests.swift; sourceTree = "<group>"; };
 		A2000016 /* MarkdownRendererTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownRendererTests.swift; sourceTree = "<group>"; };
+		A1000020A /* markdown-preview.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = "markdown-preview.css"; sourceTree = "<group>"; };
+		A1000020B /* markdown-preview.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "markdown-preview.js"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -108,8 +112,18 @@
 				A100001D /* FormattingService.swift */,
 				A1000015 /* Assets.xcassets */,
 				A1000016 /* Info.plist */,
+				A1000033 /* Resources */,
 			);
 			path = MarkdownEditor;
+			sourceTree = "<group>";
+		};
+		A1000033 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A1000020A /* markdown-preview.css */,
+				A1000020B /* markdown-preview.js */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		A1000032 = {
@@ -216,6 +230,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A1000005 /* Assets.xcassets in Resources */,
+				A100000E /* markdown-preview.css in Resources */,
+				A100000F /* markdown-preview.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
