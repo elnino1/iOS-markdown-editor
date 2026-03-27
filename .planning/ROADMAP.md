@@ -52,6 +52,13 @@ Full details: `.planning/milestones/v1.1-ROADMAP.md`
 **Goal**: A self-contained markdown renderer exists that correctly renders all required markdown elements and respects system appearance
 **Depends on**: Phase 4 (existing editor)
 **Requirements**: PREV-02, PREV-03, PREV-04, PREV-05, PREV-06, PREV-07, PREV-09
+**Plans:** 3 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Wave 0: failing test stubs (MarkdownRendererTests) + static assets (markdown-preview.css, markdown-preview.js)
+- [ ] 05-02-PLAN.md — MarkdownRenderer.swift: synchronous HTML generation via JavaScriptCore + markdown-it (tests go GREEN)
+- [ ] 05-03-PLAN.md — PreviewView.swift: WKWebView UIViewRepresentable wrapper + human dark mode verification
+
 **Success Criteria** (what must be TRUE):
   1. Given a string with H1/H2/H3 headings, the renderer displays them with distinct visual sizes and weights
   2. Given a string with `**bold**` and `*italic*`, the renderer displays styled text (not raw markers)
@@ -78,9 +85,9 @@ Full details: `.planning/milestones/v1.1-ROADMAP.md`
 | 2. Editor Experience | v1.0 | 3/3 | Complete | 2026-03-26 |
 | 3. Polish | v1.0 | 3/3 | Complete | 2026-03-26 |
 | 4. Formatting Toolbar | v1.1 | 3/3 | Complete | 2026-03-27 |
-| 5. Preview Infrastructure | v1.2 | 0/? | Not started | - |
+| 5. Preview Infrastructure | v1.2 | 0/3 | Planned | - |
 | 6. Preview Integration | v1.2 | 0/? | Not started | - |
 
 ---
 
-*Updated: 2026-03-27 — v1.2 roadmap created. Next: `/gsd:plan-phase 5`*
+*Updated: 2026-03-27 — Phase 5 planned (3 plans). Next: `/gsd:execute-phase 5`*
