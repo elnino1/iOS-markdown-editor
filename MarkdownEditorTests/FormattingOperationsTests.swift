@@ -109,4 +109,81 @@ final class FormattingOperationsTests: XCTestCase {
         XCTAssertFalse(tv.text.contains("replace me"),
                        "Selected text should have been replaced")
     }
+
+    // MARK: Toggle OFF — bold
+
+    // FMT-01: Bold toggles off when selection includes ** markers
+    func testBoldTogglesOffWhenMarkersSelected() {
+        let tv = UITextView()
+        tv.text = "**hello** world"
+        tv.selectedRange = NSRange(location: 0, length: 9) // selects "**hello**"
+        FormattingService.applyBold(to: tv)
+        XCTAssertEqual(tv.text, "hello world")
+        XCTAssertEqual(tv.selectedRange, NSRange(location: 0, length: 5))
+    }
+
+    // FMT-01: Bold toggles off when markers surround the selection
+    func testBoldTogglesOffWhenMarkersSurroundSelection() {
+        let tv = UITextView()
+        tv.text = "**hello** world"
+        tv.selectedRange = NSRange(location: 2, length: 5) // selects "hello" inside **hello**
+        FormattingService.applyBold(to: tv)
+        XCTAssertEqual(tv.text, "hello world")
+        XCTAssertEqual(tv.selectedRange, NSRange(location: 0, length: 5))
+    }
+
+    // MARK: Toggle OFF — italic
+
+    // FMT-02: Italic toggles off when selection includes * markers
+    func testItalicTogglesOffWhenMarkersSelected() {
+        let tv = UITextView()
+        tv.text = "*hello* world"
+        tv.selectedRange = NSRange(location: 0, length: 7) // selects "*hello*"
+        FormattingService.applyItalic(to: tv)
+        XCTAssertEqual(tv.text, "hello world")
+        XCTAssertEqual(tv.selectedRange, NSRange(location: 0, length: 5))
+    }
+
+    // FMT-02: Italic toggles off when markers surround the selection
+    func testItalicTogglesOffWhenMarkersSurroundSelection() {
+        let tv = UITextView()
+        tv.text = "*hello* world"
+        tv.selectedRange = NSRange(location: 1, length: 5) // selects "hello" inside *hello*
+        FormattingService.applyItalic(to: tv)
+        XCTAssertEqual(tv.text, "hello world")
+        XCTAssertEqual(tv.selectedRange, NSRange(location: 0, length: 5))
+    }
+
+    // FMT-02: Italic does NOT toggle off on bold-wrapped text (** is not *)
+    func testItalicDoesNotToggleBoldMarkers() {
+        let tv = UITextView()
+        tv.text = "**hello**"
+        tv.selectedRange = NSRange(location: 2, length: 5) // selects "hello" inside **hello**
+        FormattingService.applyItalic(to: tv)
+        // Should wrap, not strip — result is **_hello_** style
+        XCTAssertEqual(tv.text, "***hello***")
+    }
+
+    // MARK: Toggle OFF — bullet
+
+    // FMT-03: Bullet toggles off when line already starts with "- "
+    func testBulletTogglesOff() {
+        let tv = UITextView()
+        tv.text = "- This is a line"
+        tv.selectedRange = NSRange(location: 6, length: 0) // cursor inside the line
+        FormattingService.applyBullet(to: tv)
+        XCTAssertEqual(tv.text, "This is a line")
+        XCTAssertEqual(tv.selectedRange, NSRange(location: 4, length: 0))
+    }
+
+    // FMT-03: Bullet toggles off on first line of multi-line text
+    func testBulletTogglesOffMultiLine() {
+        let tv = UITextView()
+        tv.text = "- line one\nline two"
+        tv.selectedRange = NSRange(location: 3, length: 0)
+        FormattingService.applyBullet(to: tv)
+        XCTAssertTrue(tv.text.hasPrefix("line one\n"),
+                      "Bullet prefix should be removed from first line")
+        XCTAssertTrue(tv.text.hasSuffix("line two"))
+    }
 }
