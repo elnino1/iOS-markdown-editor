@@ -33,8 +33,7 @@ Applied to **rendered HTML/CSS content** within WKWebView:
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| xs | 2px | Inline code padding, table cell borders |
-| sm | 8px | List item spacing, table cell padding |
+| sm | 8px | Inline code padding, list item spacing, table cell padding |
 | md | 12px | Paragraph margins, code block padding |
 | lg | 16px | Section vertical spacing (headings, blocks) |
 | xl | 24px | Document-level top/bottom margins |
