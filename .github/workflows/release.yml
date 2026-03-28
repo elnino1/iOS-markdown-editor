@@ -2,24 +2,31 @@ name: Release
 
 on:
   workflow_run:
-    workflows: [ "Test" ]
-    types: [ completed ]
-    branches: [ "main" ]
+    workflows: ["Tests"]
+    types: [completed]
+    branches: [main]
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  SCHEME: MarkdownEditor
+  PROJECT: MarkdownEditor.xcodeproj
+  BUNDLE_ID: com.personal.MarkdownEditor
 
 jobs:
   release:
-    name: Build, Tag, and Release
+    name: Build IPA and Publish AltStore Release
     if: github.event.workflow_run.conclusion == 'success'
-    runs-on: ubuntu-latest
+    runs-on: macos-15
     permissions:
       contents: write
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: '0'
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_16.3.app
 
       - name: Bump version and push tag
         id: tag_version
@@ -28,27 +35,82 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           default_bump: patch
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
+      - name: Set marketing version from tag
+        run: |
+          VERSION="${{ steps.tag_version.outputs.new_version }}"
+          xcrun agvtool new-marketing-version "$VERSION"
+          xcrun agvtool new-version -all ${{ github.run_number }}
 
-      - name: Install build dependencies
-        run: pip install build
+      - name: Archive
+        run: |
+          set -o pipefail
+          xcodebuild archive \
+            -project $PROJECT \
+            -scheme $SCHEME \
+            -destination 'generic/platform=iOS' \
+            -archivePath build/$SCHEME.xcarchive \
+            -skipPackagePluginValidation \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            | xcpretty --color
+        env:
+          NSUnbufferedIO: YES
 
-      - name: Build package
-        run: python -m build
+      - name: Package IPA
+        run: |
+          APP_PATH="build/$SCHEME.xcarchive/Products/Applications/$SCHEME.app"
+          mkdir -p build/ipa/Payload
+          cp -r "$APP_PATH" build/ipa/Payload/
+          cd build/ipa
+          zip -r "../../build/$SCHEME.ipa" Payload
+          cd ../..
+          IPA_SIZE=$(wc -c < "build/$SCHEME.ipa" | tr -d ' ')
+          echo "IPA_SIZE=$IPA_SIZE" >> $GITHUB_ENV
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
+      - name: Update AltStore source (apps.json)
+        run: |
+          VERSION="${{ steps.tag_version.outputs.new_version }}"
+          TAG="${{ steps.tag_version.outputs.new_tag }}"
+          DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          DOWNLOAD_URL="https://github.com/elnino1/iOS-markdown-editor/releases/download/${TAG}/$SCHEME.ipa"
+          CHANGELOG="${{ steps.tag_version.outputs.changelog }}"
 
-      - name: Install mcpb CLI
-        run: npm install -g @anthropic-ai/mcpb
+          # Build the new version entry
+          NEW_VERSION=$(jq -n \
+            --arg version "$VERSION" \
+            --arg buildVersion "${{ github.run_number }}" \
+            --arg date "$DATE" \
+            --arg downloadURL "$DOWNLOAD_URL" \
+            --argjson size "$IPA_SIZE" \
+            --arg changelog "$CHANGELOG" \
+            '{
+              version: $version,
+              buildVersion: $buildVersion,
+              date: $date,
+              downloadURL: $downloadURL,
+              size: $size,
+              localizedDescription: $changelog,
+              minOSVersion: "17.0"
+            }')
 
-      - name: Pack Desktop Extension
-        run: mcpb pack . scrivener-assistant.mcpb
+          # Prepend new version to the versions array
+          jq --argjson newVersion "$NEW_VERSION" \
+            '.apps[0].versions = [$newVersion] + .apps[0].versions' \
+            apps.json > apps.json.tmp && mv apps.json.tmp apps.json
+
+          # Update top-level version for AltStore display
+          jq --arg version "$VERSION" \
+            '.apps[0].version = $version | .apps[0].versionDate = now | .apps[0].downloadURL = (.apps[0].versions[0].downloadURL) | .apps[0].size = (.apps[0].versions[0].size)' \
+            apps.json > apps.json.tmp && mv apps.json.tmp apps.json
+
+      - name: Commit updated apps.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add apps.json
+          git commit -m "chore(release): update AltStore source for ${{ steps.tag_version.outputs.new_tag }}"
+          git push
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -56,7 +118,4 @@ jobs:
           tag_name: ${{ steps.tag_version.outputs.new_tag }}
           name: ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
-          files: |
-            scrivener-assistant.mcpb
-            dist/*.whl
-            dist/*.tar.gz
+          files: build/${{ env.SCHEME }}.ipa

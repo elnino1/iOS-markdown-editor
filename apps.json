@@ -1,0 +1,19 @@
+{
+  "name": "Markdown Editor",
+  "identifier": "com.personal.markdown-editor-source",
+  "apps": [
+    {
+      "name": "Markdown Editor",
+      "bundleIdentifier": "com.personal.MarkdownEditor",
+      "developerName": "elnino1",
+      "subtitle": "Write and preview Markdown on iOS",
+      "localizedDescription": "A native iOS markdown editor with live preview. Write markdown and see it rendered with syntax highlighting, tables, and automatic dark mode support.",
+      "iconURL": "https://raw.githubusercontent.com/elnino1/iOS-markdown-editor/main/MarkdownEditor/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
+      "tintColor": "4A90E2",
+      "screenshots": [],
+      "versions": [],
+      "appPermissions": {}
+    }
+  ],
+  "news": []
+}

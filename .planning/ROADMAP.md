@@ -92,7 +92,7 @@ Plans:
 | 3. Polish | v1.0 | 3/3 | Complete | 2026-03-26 |
 | 4. Formatting Toolbar | v1.1 | 3/3 | Complete | 2026-03-27 |
 | 5. Preview Infrastructure | v1.2 | 3/3 | Complete | 2026-03-28 |
-| 6. Preview Integration | 2/2 | Complete   | 2026-03-28 | - |
+| 6. Preview Integration | 2/2 | Complete    | 2026-03-28 | - |
 
 ---
 
