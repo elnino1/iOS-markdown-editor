@@ -1,0 +1,188 @@
+import SwiftUI
+import Combine
+
+struct EditorView: View {
+    @EnvironmentObject private var appState: AppState
+    @State private var saveTimer: AnyCancellable? = nil
+    @State private var showUnsavedAlert = false
+    @State private var showSaveError = false
+    @State private var pendingURL: URL? = nil
+    @State private var highlightingDisabled = false
+    @State private var isPreviewMode: Bool = false
+    @State private var showLargeFileAlert = false
+    @State private var showEncodingAlert = false
+    private var document: MarkdownDocument? { appState.document }
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if let doc = document {
+                    editorView(for: doc)
+                } else {
+                    Text("No file open")
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .navigationTitle(buildTitle())
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Close") {
+                        closeEditor()
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        isPreviewMode.toggle()
+                    } label: {
+                        Image(systemName: isPreviewMode ? "pencil" : "eye")
+                    }
+                    .accessibilityLabel(isPreviewMode ? "Switch to edit mode" : "Switch to preview mode")
+                }
+            }
+            .onChange(of: appState.pendingOpenURL) { url in
+                guard let url else { return }
+                if let doc = document, doc.hasUnsavedChanges {
+                    pendingURL = url
+                    showUnsavedAlert = true
+                } else {
+                    // No unsaved changes — open directly
+                    appState.closeCurrentDocument {
+                        appState.openAfterResolvingConflict(url: url)
+                    }
+                }
+            }
+            .onChange(of: appState.isEditorPresented) { isPresented in
+                if isPresented {
+                    // New document session starting — reset per-session highlighting state
+                    // (largeFileWarning onChange will re-enable if needed)
+                    highlightingDisabled = false
+                }
+            }
+            .onChange(of: appState.largeFileWarning) { isLarge in
+                if isLarge {
+                    highlightingDisabled = true
+                    showLargeFileAlert = true
+                }
+            }
+            .onChange(of: appState.encodingFallbackWarning) { isFallback in
+                if isFallback { showEncodingAlert = true }
+            }
+        }
+        .alert("Unsaved Changes", isPresented: $showUnsavedAlert) {
+            Button("Save") {
+                saveImmediately {
+                    if let url = pendingURL {
+                        appState.openAfterResolvingConflict(url: url)
+                    }
+                    pendingURL = nil
+                }
+            }
+            Button("Discard", role: .destructive) {
+                if let url = pendingURL {
+                    appState.closeCurrentDocument {
+                        appState.openAfterResolvingConflict(url: url)
+                    }
+                }
+                pendingURL = nil
+            }
+            Button("Cancel", role: .cancel) {
+                appState.pendingOpenURL = nil
+                pendingURL = nil
+            }
+        } message: {
+            Text("Save changes before opening a new file?")
+        }
+        .alert("Save Failed", isPresented: $showSaveError) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(FileOperationError.saveFailed.message)
+        }
+        .alert("Large File", isPresented: $showLargeFileAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("This file is large. Syntax highlighting has been disabled to keep the editor responsive.")
+        }
+        .alert("Encoding Changed", isPresented: $showEncodingAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("This file wasn't encoded as UTF-8. It has been read using a compatible encoding. When you save, it will be saved as UTF-8.")
+        }
+    }
+
+    // MARK: - Editor view with toolbar
+
+    @ViewBuilder
+    private func editorView(for doc: MarkdownDocument) -> some View {
+        if isPreviewMode {
+            PreviewView(markdownString: doc.text)
+                .ignoresSafeArea()
+        } else {
+            MarkdownTextEditor(
+                text: Binding(
+                    get: { doc.text },
+                    set: { newValue in
+                        doc.text = newValue
+                        scheduleSave(for: doc)
+                    }
+                ),
+                isHighlightingEnabled: !highlightingDisabled
+            )
+            .ignoresSafeArea(.keyboard)
+        }
+    }
+
+    // MARK: - Auto-save
+
+    /// Debounce: cancel any pending save, schedule a new one 1.5s after last keystroke
+    private func scheduleSave(for doc: MarkdownDocument) {
+        saveTimer?.cancel()
+        saveTimer = Just(())
+            .delay(for: .seconds(1.5), scheduler: RunLoop.main)
+            .sink { _ in
+                // Calling updateChangeCount(.done) marks the document as changed,
+                // which triggers UIDocument's built-in auto-save mechanism.
+                // UIDocument will call contents(forType:) and write to disk.
+                doc.updateChangeCount(.done)
+            }
+    }
+
+    // MARK: - Immediate save (for alert "Save" action)
+
+    private func saveImmediately(completion: @escaping () -> Void) {
+        guard let doc = document else {
+            completion()
+            return
+        }
+        saveTimer?.cancel()
+        doc.save(to: doc.fileURL, for: .forOverwriting) { success in
+            if !success {
+                Task { @MainActor in
+                    self.showSaveError = true
+                }
+            }
+            completion()
+        }
+    }
+
+    // MARK: - Title
+
+    /// Returns filename with " *" suffix when document has unsaved changes.
+    /// Reads UIDocument.hasUnsavedChanges directly each time view re-renders.
+    /// View re-renders when doc.text changes via the Binding setter above, so
+    /// the title updates on each keystroke debounce cycle.
+    private func buildTitle() -> String {
+        let filename = document?.fileURL.lastPathComponent ?? "Editor"
+        let unsavedMarker = (document?.hasUnsavedChanges ?? false) ? " *" : ""
+        return filename + unsavedMarker
+    }
+
+    // MARK: - Close
+
+    private func closeEditor() {
+        saveTimer?.cancel()
+        isPreviewMode = false
+        appState.closeCurrentDocument()
+    }
+
+}
