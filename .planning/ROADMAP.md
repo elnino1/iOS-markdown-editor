@@ -73,8 +73,8 @@ Plans:
 **Plans:** 2/2 plans complete
 
 Plans:
-- [ ] 06-01-PLAN.md — Wire toggle button into EditorView nav bar; conditionally render PreviewView or MarkdownTextEditor
-- [ ] 06-02-PLAN.md — Implement link interception in PreviewView (SFSafariViewController) + human verify end-to-end
+- [x] 06-01-PLAN.md — Wire toggle button into EditorView nav bar; conditionally render PreviewView or MarkdownTextEditor
+- [x] 06-02-PLAN.md — Implement link interception in PreviewView (SFSafariViewController) + human verify end-to-end
 
 **Success Criteria** (what must be TRUE):
   1. A button in the editor navigation bar switches the view from the UITextView editor to the rendered preview and back; the button label or icon reflects the current mode
