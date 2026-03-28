@@ -70,7 +70,7 @@ Plans:
 **Goal**: Users can switch between editing raw markdown and reading the rendered preview without leaving the editor
 **Depends on**: Phase 5
 **Requirements**: PREV-01, PREV-08
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
 - [ ] 06-01-PLAN.md — Wire toggle button into EditorView nav bar; conditionally render PreviewView or MarkdownTextEditor
@@ -92,7 +92,7 @@ Plans:
 | 3. Polish | v1.0 | 3/3 | Complete | 2026-03-26 |
 | 4. Formatting Toolbar | v1.1 | 3/3 | Complete | 2026-03-27 |
 | 5. Preview Infrastructure | v1.2 | 3/3 | Complete | 2026-03-28 |
-| 6. Preview Integration | v1.2 | 0/2 | Not started | - |
+| 6. Preview Integration | 1/2 | In Progress|  | - |
 
 ---
 

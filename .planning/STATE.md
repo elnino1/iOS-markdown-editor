@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Markdown Preview
 status: unknown
-stopped_at: Completed 05-03-PLAN.md
-last_updated: "2026-03-28T20:01:49.535Z"
+stopped_at: Completed 06-01-PLAN.md
+last_updated: "2026-03-28T20:18:46.037Z"
 progress:
   total_phases: 2
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 5
+  completed_plans: 4
 ---
 
 # Project State: iOS Markdown Editor
@@ -23,15 +23,15 @@ progress:
 
 ## Current Position
 
-Phase: 5 (Preview Infrastructure) — COMPLETE
-Plan: 3 of 3 (all plans complete)
+Phase: 6 (Preview Integration) — EXECUTING
+Plan: 2 of 2
 
 ## Project Reference
 
 See: .planning/PROJECT.md (updated 2026-03-27)
 
 **Core value:** Open markdown files from anywhere, edit, save back — including dot folders other apps hide
-**Current focus:** Phase 5 — Preview Infrastructure
+**Current focus:** Phase 6 — Preview Integration
 **Shipped:** v1.0 (2026-03-26), v1.1 (2026-03-27)
 
 ---
@@ -92,16 +92,17 @@ TDD pattern: Wave 0 failing stubs before production code (established in v1.1)
 | Bundle(for: MarkdownRenderer.self) not Bundle.main | Bundle.main returns test runner bundle during unit tests — class bundle resolves correctly in both contexts | ✓ 05-02 |
 | jsonEncoded() wraps in array before JSONSerialization | String is not valid JSON top-level type; serialize [string], strip outer brackets | ✓ 05-02 |
 | JSContext UMD shims required for markdown-it | var window=this; var module={exports:{}}; — markdown-it UMD needs these to execute outside browser | ✓ 05-02 |
+| PreviewView.swift added to Xcode project build target | File existed on disk from Phase 5 but was never registered in project.pbxproj — required for EditorView to reference it | ✓ 06-01 |
 
 ---
 
 ## Session Continuity
 
-Last session: 2026-03-28T19:24:05.367Z
-Stopped at: Completed 05-03-PLAN.md
+Last session: 2026-03-28T20:18:46.034Z
+Stopped at: Completed 06-01-PLAN.md
 Resume with: `/gsd:execute-phase 5`
 
 ---
 
 *State initialized: 2026-03-25*
-*Last updated: 2026-03-27 — 05-03 complete: PreviewView.swift UIViewRepresentable WKWebView wrapper created and human-verified in light + dark mode; Phase 5 all 3 plans complete; ready for Phase 6 (Preview Integration)*
+*Last updated: 2026-03-27 — 06-01 complete: EditorView edit/preview toggle wired with eye/pencil nav bar button; isPreviewMode @State conditionally renders PreviewView(markdownString: doc.text) or MarkdownTextEditor; PreviewView.swift added to Xcode project build target; PREV-01 complete*
