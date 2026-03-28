@@ -1,5 +1,15 @@
 # Milestones
 
+## v1.2 Markdown Preview (Shipped: 2026-03-28)
+
+**Phases completed:** 2 phases, 5 plans, 0 tasks
+
+**Key accomplishments:**
+
+- (none recorded)
+
+---
+
 ## v1.1 Formatting Toolbar (Shipped: 2026-03-27)
 
 **Phases:** 4 | **Plans:** 3 | **Timeline:** 2 days (2026-03-26 → 2026-03-27)
