@@ -1,13 +1,14 @@
 // MarkdownEditor/PreviewView.swift
 import SwiftUI
 import WebKit
+import SafariServices
 
 /// SwiftUI wrapper for WKWebView that renders markdown as formatted HTML.
 /// - Accepts a markdown string as input.
 /// - Calls MarkdownRenderer.generateHTML(from:) to produce the HTML document.
 /// - WKWebView handles light/dark mode automatically via CSS prefers-color-scheme
 ///   embedded in the HTML output — no UIView.overrideUserInterfaceStyle needed.
-/// - Phase 6 will add toggle wiring and SFSafariViewController link handling.
+/// - Link taps are intercepted via WKNavigationDelegate and opened in SFSafariViewController.
 struct PreviewView: UIViewRepresentable {
 
     /// The raw markdown string to render. Changes trigger a webView reload via updateUIView.
@@ -46,21 +47,41 @@ struct PreviewView: UIViewRepresentable {
 
         /// Called when the HTML document has fully loaded and rendered.
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-            // Phase 6: post-load JS execution goes here if needed.
+            // HTML document fully loaded — WKWebView is ready for interaction.
         }
 
         /// Intercepts navigation actions.
-        /// Phase 5: allows all navigations (no link interception yet).
-        /// Phase 6: will cancel link taps and present SFSafariViewController.
+        /// Link taps (http/https) are cancelled and opened in SFSafariViewController.
+        /// All other navigations (initial page load, fragment jumps) are allowed.
         func webView(
             _ webView: WKWebView,
             decidePolicyFor navigationAction: WKNavigationAction,
             decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
         ) {
-            // Phase 5: allow all navigations through
-            // Phase 6 will check: navigationAction.navigationType == .linkActivated
-            //   and present SFSafariViewController for http/https URLs
-            decisionHandler(.allow)
+            if navigationAction.navigationType == .linkActivated,
+               let url = navigationAction.request.url,
+               url.scheme == "http" || url.scheme == "https" {
+                // Prevent default (would open Safari app or navigate WKWebView)
+                decisionHandler(.cancel)
+
+                // Present SFSafariViewController in-app
+                let safariVC = SFSafariViewController(url: url)
+                safariVC.modalPresentationStyle = .pageSheet
+
+                // Find the topmost presented view controller to present from
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                   let keyWindow = windowScene.windows.first(where: { $0.isKeyWindow }),
+                   let rootVC = keyWindow.rootViewController {
+                    var topVC = rootVC
+                    while let presented = topVC.presentedViewController {
+                        topVC = presented
+                    }
+                    topVC.present(safariVC, animated: true)
+                }
+            } else {
+                // Allow initial page load and all non-link navigations
+                decisionHandler(.allow)
+            }
         }
     }
 }
