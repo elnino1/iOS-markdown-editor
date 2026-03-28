@@ -41,7 +41,7 @@ Full details: `.planning/milestones/v1.1-ROADMAP.md`
 
 ### v1.2 Markdown Preview
 
-- [ ] **Phase 5: Preview Infrastructure** — WKWebView wrapper, JS markdown library bundled, full rendering pipeline with dark mode support
+- [x] **Phase 5: Preview Infrastructure** — WKWebView wrapper, JS markdown library bundled, full rendering pipeline with dark mode support (completed 2026-03-28)
 - [ ] **Phase 6: Preview Integration** — Toggle button wired into editor nav bar, links open in SFSafariViewController
 
 ---
@@ -52,7 +52,7 @@ Full details: `.planning/milestones/v1.1-ROADMAP.md`
 **Goal**: A self-contained markdown renderer exists that correctly renders all required markdown elements and respects system appearance
 **Depends on**: Phase 4 (existing editor)
 **Requirements**: PREV-02, PREV-03, PREV-04, PREV-05, PREV-06, PREV-07, PREV-09
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 
 Plans:
 - [ ] 05-01-PLAN.md — Wave 0: failing test stubs (MarkdownRendererTests) + static assets (markdown-preview.css, markdown-preview.js)
@@ -85,7 +85,7 @@ Plans:
 | 2. Editor Experience | v1.0 | 3/3 | Complete | 2026-03-26 |
 | 3. Polish | v1.0 | 3/3 | Complete | 2026-03-26 |
 | 4. Formatting Toolbar | v1.1 | 3/3 | Complete | 2026-03-27 |
-| 5. Preview Infrastructure | 2/3 | In Progress|  | - |
+| 5. Preview Infrastructure | 3/3 | Complete   | 2026-03-28 | - |
 | 6. Preview Integration | v1.2 | 0/? | Not started | - |
 
 ---
