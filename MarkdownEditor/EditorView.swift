@@ -8,6 +8,7 @@ struct EditorView: View {
     @State private var showSaveError = false
     @State private var pendingURL: URL? = nil
     @State private var highlightingDisabled = false
+    @State private var isPreviewMode: Bool = false
     @State private var showLargeFileAlert = false
     @State private var showEncodingAlert = false
     private var document: MarkdownDocument? { appState.document }
@@ -29,6 +30,14 @@ struct EditorView: View {
                     Button("Close") {
                         closeEditor()
                     }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        isPreviewMode.toggle()
+                    } label: {
+                        Image(systemName: isPreviewMode ? "pencil" : "eye")
+                    }
+                    .accessibilityLabel(isPreviewMode ? "Switch to edit mode" : "Switch to preview mode")
                 }
             }
             .onChange(of: appState.pendingOpenURL) { url in
@@ -105,17 +114,22 @@ struct EditorView: View {
 
     @ViewBuilder
     private func editorView(for doc: MarkdownDocument) -> some View {
-        MarkdownTextEditor(
-            text: Binding(
-                get: { doc.text },
-                set: { newValue in
-                    doc.text = newValue
-                    scheduleSave(for: doc)
-                }
-            ),
-            isHighlightingEnabled: !highlightingDisabled
-        )
-        .ignoresSafeArea(.keyboard)
+        if isPreviewMode {
+            PreviewView(markdownString: doc.text)
+                .ignoresSafeArea()
+        } else {
+            MarkdownTextEditor(
+                text: Binding(
+                    get: { doc.text },
+                    set: { newValue in
+                        doc.text = newValue
+                        scheduleSave(for: doc)
+                    }
+                ),
+                isHighlightingEnabled: !highlightingDisabled
+            )
+            .ignoresSafeArea(.keyboard)
+        }
     }
 
     // MARK: - Auto-save
@@ -167,6 +181,7 @@ struct EditorView: View {
 
     private func closeEditor() {
         saveTimer?.cancel()
+        isPreviewMode = false
         appState.closeCurrentDocument()
     }
 
