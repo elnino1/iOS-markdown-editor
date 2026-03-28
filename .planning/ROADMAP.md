@@ -4,7 +4,7 @@
 **Core Value:** A focused markdown editor that works with any file source — open from anywhere, edit, save back.
 
 **Created:** 2026-03-25
-**Updated:** 2026-03-27 (v1.2 roadmap created)
+**Updated:** 2026-03-28 (Phase 6 planned)
 **Status:** Active — v1.2 Markdown Preview
 
 ---
@@ -55,9 +55,9 @@ Full details: `.planning/milestones/v1.1-ROADMAP.md`
 **Plans:** 3/3 plans complete
 
 Plans:
-- [ ] 05-01-PLAN.md — Wave 0: failing test stubs (MarkdownRendererTests) + static assets (markdown-preview.css, markdown-preview.js)
-- [ ] 05-02-PLAN.md — MarkdownRenderer.swift: synchronous HTML generation via JavaScriptCore + markdown-it (tests go GREEN)
-- [ ] 05-03-PLAN.md — PreviewView.swift: WKWebView UIViewRepresentable wrapper + human dark mode verification
+- [x] 05-01-PLAN.md — Wave 0: failing test stubs (MarkdownRendererTests) + static assets (markdown-preview.css, markdown-preview.js)
+- [x] 05-02-PLAN.md — MarkdownRenderer.swift: synchronous HTML generation via JavaScriptCore + markdown-it (tests go GREEN)
+- [x] 05-03-PLAN.md — PreviewView.swift: WKWebView UIViewRepresentable wrapper + human dark mode verification
 
 **Success Criteria** (what must be TRUE):
   1. Given a string with H1/H2/H3 headings, the renderer displays them with distinct visual sizes and weights
@@ -70,6 +70,12 @@ Plans:
 **Goal**: Users can switch between editing raw markdown and reading the rendered preview without leaving the editor
 **Depends on**: Phase 5
 **Requirements**: PREV-01, PREV-08
+**Plans:** 2 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Wire toggle button into EditorView nav bar; conditionally render PreviewView or MarkdownTextEditor
+- [ ] 06-02-PLAN.md — Implement link interception in PreviewView (SFSafariViewController) + human verify end-to-end
+
 **Success Criteria** (what must be TRUE):
   1. A button in the editor navigation bar switches the view from the UITextView editor to the rendered preview and back; the button label or icon reflects the current mode
   2. Tapping a link in the preview opens SFSafariViewController inline (no app switch, no Safari app)
@@ -85,9 +91,9 @@ Plans:
 | 2. Editor Experience | v1.0 | 3/3 | Complete | 2026-03-26 |
 | 3. Polish | v1.0 | 3/3 | Complete | 2026-03-26 |
 | 4. Formatting Toolbar | v1.1 | 3/3 | Complete | 2026-03-27 |
-| 5. Preview Infrastructure | 3/3 | Complete    | 2026-03-28 | - |
-| 6. Preview Integration | v1.2 | 0/? | Not started | - |
+| 5. Preview Infrastructure | v1.2 | 3/3 | Complete | 2026-03-28 |
+| 6. Preview Integration | v1.2 | 0/2 | Not started | - |
 
 ---
 
-*Updated: 2026-03-27 — Phase 5 planned (3 plans). Next: `/gsd:execute-phase 5`*
+*Updated: 2026-03-28 — Phase 6 planned (2 plans). Next: `/gsd:execute-phase 6`*
