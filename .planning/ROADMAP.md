@@ -85,7 +85,7 @@ Plans:
 | 2. Editor Experience | v1.0 | 3/3 | Complete | 2026-03-26 |
 | 3. Polish | v1.0 | 3/3 | Complete | 2026-03-26 |
 | 4. Formatting Toolbar | v1.1 | 3/3 | Complete | 2026-03-27 |
-| 5. Preview Infrastructure | 3/3 | Complete   | 2026-03-28 | - |
+| 5. Preview Infrastructure | 3/3 | Complete    | 2026-03-28 | - |
 | 6. Preview Integration | v1.2 | 0/? | Not started | - |
 
 ---
