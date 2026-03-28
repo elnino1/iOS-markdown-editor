@@ -42,7 +42,7 @@ Full details: `.planning/milestones/v1.1-ROADMAP.md`
 ### v1.2 Markdown Preview
 
 - [x] **Phase 5: Preview Infrastructure** — WKWebView wrapper, JS markdown library bundled, full rendering pipeline with dark mode support (completed 2026-03-28)
-- [ ] **Phase 6: Preview Integration** — Toggle button wired into editor nav bar, links open in SFSafariViewController
+- [x] **Phase 6: Preview Integration** — Toggle button wired into editor nav bar, links open in SFSafariViewController (completed 2026-03-28)
 
 ---
 
@@ -70,7 +70,7 @@ Plans:
 **Goal**: Users can switch between editing raw markdown and reading the rendered preview without leaving the editor
 **Depends on**: Phase 5
 **Requirements**: PREV-01, PREV-08
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 - [ ] 06-01-PLAN.md — Wire toggle button into EditorView nav bar; conditionally render PreviewView or MarkdownTextEditor
@@ -92,7 +92,7 @@ Plans:
 | 3. Polish | v1.0 | 3/3 | Complete | 2026-03-26 |
 | 4. Formatting Toolbar | v1.1 | 3/3 | Complete | 2026-03-27 |
 | 5. Preview Infrastructure | v1.2 | 3/3 | Complete | 2026-03-28 |
-| 6. Preview Integration | 1/2 | In Progress|  | - |
+| 6. Preview Integration | 2/2 | Complete   | 2026-03-28 | - |
 
 ---
 

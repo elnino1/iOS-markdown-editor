@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Markdown Preview
 status: unknown
-stopped_at: Completed 06-01-PLAN.md
-last_updated: "2026-03-28T20:18:46.037Z"
+stopped_at: Completed 06-02-PLAN.md
+last_updated: "2026-03-28T20:26:18.643Z"
 progress:
   total_phases: 2
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 5
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # Project State: iOS Markdown Editor
@@ -23,8 +23,8 @@ progress:
 
 ## Current Position
 
-Phase: 6 (Preview Integration) — EXECUTING
-Plan: 2 of 2
+Phase: 6 (Preview Integration) — COMPLETE
+Plan: 2 of 2 (all plans done)
 
 ## Project Reference
 
@@ -93,16 +93,17 @@ TDD pattern: Wave 0 failing stubs before production code (established in v1.1)
 | jsonEncoded() wraps in array before JSONSerialization | String is not valid JSON top-level type; serialize [string], strip outer brackets | ✓ 05-02 |
 | JSContext UMD shims required for markdown-it | var window=this; var module={exports:{}}; — markdown-it UMD needs these to execute outside browser | ✓ 05-02 |
 | PreviewView.swift added to Xcode project build target | File existed on disk from Phase 5 but was never registered in project.pbxproj — required for EditorView to reference it | ✓ 06-01 |
+| WKNavigationDelegate link interception: cancel linkActivated + present SFSafariViewController pageSheet | UIApplication.connectedScenes pattern for topmost VC discovery from UIViewRepresentable Coordinator | ✓ 06-02 |
 
 ---
 
 ## Session Continuity
 
-Last session: 2026-03-28T20:18:46.034Z
-Stopped at: Completed 06-01-PLAN.md
+Last session: 2026-03-28T20:26:18.639Z
+Stopped at: Completed 06-02-PLAN.md
 Resume with: `/gsd:execute-phase 5`
 
 ---
 
 *State initialized: 2026-03-25*
-*Last updated: 2026-03-27 — 06-01 complete: EditorView edit/preview toggle wired with eye/pencil nav bar button; isPreviewMode @State conditionally renders PreviewView(markdownString: doc.text) or MarkdownTextEditor; PreviewView.swift added to Xcode project build target; PREV-01 complete*
+*Last updated: 2026-03-28 — 06-02 complete: PreviewView.Coordinator WKNavigationDelegate upgraded to intercept link taps (linkActivated + http/https) and present SFSafariViewController as a pageSheet; non-link navigations pass through; PREV-08 complete; v1.2 milestone fully delivered*

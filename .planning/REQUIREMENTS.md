@@ -8,14 +8,14 @@
 
 ### Preview Mode
 
-- [ ] **PREV-01**: User can toggle between edit mode and preview mode via a button in the editor navigation bar
+- [x] **PREV-01**: User can toggle between edit mode and preview mode via a button in the editor navigation bar
 - [x] **PREV-02**: Preview renders headings (H1–H3) with visual hierarchy (size, weight)
 - [x] **PREV-03**: Preview renders `**bold**` and `*italic*` as styled text
 - [x] **PREV-04**: Preview renders bullet lists (`- `) and numbered lists (`1. `) with proper indentation
 - [x] **PREV-05**: Preview renders fenced code blocks with monospace font
 - [x] **PREV-06**: Preview renders inline `code` with monospace font
 - [x] **PREV-07**: Preview renders markdown tables as visual grids
-- [ ] **PREV-08**: User can tap a link in preview to open it in an in-app browser (SFSafariViewController)
+- [x] **PREV-08**: User can tap a link in preview to open it in an in-app browser (SFSafariViewController)
 - [x] **PREV-09**: Preview matches the system light/dark mode setting
 
 ## Future Requirements
@@ -39,14 +39,14 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PREV-01 | Phase 6 | Pending |
+| PREV-01 | Phase 6 | Complete |
 | PREV-02 | Phase 5 | Complete |
 | PREV-03 | Phase 5 | Complete |
 | PREV-04 | Phase 5 | Complete |
 | PREV-05 | Phase 5 | Complete |
 | PREV-06 | Phase 5 | Complete |
 | PREV-07 | Phase 5 | Complete |
-| PREV-08 | Phase 6 | Pending |
+| PREV-08 | Phase 6 | Complete |
 | PREV-09 | Phase 5 | Complete |
 
 **Coverage:**
